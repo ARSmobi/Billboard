@@ -1,0 +1,28 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% block title %}
+    {% trans "Объявление" %}
+{% endblock title %}
+
+{% block content %}
+    <h3>{% trans "Объявление" %}</h3>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn btn-outline-primary" type="submit" value="{% trans 'Сохранить' %}">
+    </form>
+    <a href="{% url 'lk' pk=request.user.id %}">
+        <button type="button" class="btn btn-outline-warning">{% trans "Отмена" %}</button>
+    </a>
+    {% if request.path != '/advertisement/create/' %}
+        <a href="{% url 'adv_delete' pk=advertisement.id %}">
+            <button type="button" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
+        </a>
+    {% endif %}
+
+{% endblock content %}

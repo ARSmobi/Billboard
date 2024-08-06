@@ -1,0 +1,18 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {{ advertisement.title }}
+{% endblock title %}
+
+{% block content %}
+    <h1>{{ adv.title }}</h1>
+    <p>{{ adv.text }}</p>
+    {{ adv.content|safe }}
+    {% if adv.user != request.user %}
+        <div style="display: flex; justify-content: right;">
+            <a href="{% url 'reaction_create' advertisement_id=adv.id %}"><button type="button" class="btn btn-outline-primary">{% trans "Откликнуться" %}</button></a>
+        </div>
+    {% endif %}
+
+{% endblock content %}

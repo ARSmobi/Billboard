@@ -1,0 +1,22 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    Главная
+{% endblock title %}
+
+{% block content %}
+
+{% if advertisements %}
+    {% for adv in advertisements %}
+        <h1><a href="{% url 'adv_detail' pk=adv.id %}">{{ adv.title }}</a></h1>
+        <p>{{ adv.text }}</p>
+        {{ adv.content|safe }}
+    {% endfor %}
+{% else %}
+    <div class="alert alert-primary" role="alert">
+        {% trans "Объявлений пока нет" %}
+    </div>
+{% endif %}
+
+{% endblock content %}

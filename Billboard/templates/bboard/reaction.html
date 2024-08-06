@@ -1,0 +1,23 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% block title %}
+    {% trans "Отклик на объявление" %}
+{% endblock title %}
+
+{% block content %}
+    <h3>{% trans "Отклик на объявление" %}</h3>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn btn-outline-primary" type="submit" value="{% trans 'Откликнуться' %}">
+    </form>
+    <a href="{% url 'adv_detail' pk=request.user.id %}">
+        <button type="button" class="btn btn-outline-warning">{% trans "Отмена" %}</button>
+    </a>
+
+{% endblock content %}
