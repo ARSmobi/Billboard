@@ -1,0 +1,16 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {{ advertisement.title }}
+{% endblock title %}
+
+{% block content %}
+
+    {% for reaction in reactions %}
+        {{ reaction.text }}
+        {{ reaction.dateCreation|date:"d-M-Y" }}
+        <hr>
+    {% endfor %}
+
+{% endblock content %}

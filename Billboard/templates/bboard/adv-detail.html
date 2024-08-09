@@ -13,6 +13,14 @@
         <div style="display: flex; justify-content: right;">
             <a href="{% url 'reaction_create' advertisement_id=adv.id %}"><button type="button" class="btn btn-outline-primary">{% trans "Откликнуться" %}</button></a>
         </div>
+    {% elif adv.user == request.user %}
+        <div style="display: flex; justify-content: right;">
+            <a href="{% url 'reaction_list' pk=adv.id %}">
+                <button type="button" class="btn btn-outline-info">
+                    {% trans "Откликнувшиеся" %}: {{ reactions }}
+                </button>
+            </a>
+        </div>
     {% endif %}
 
 {% endblock content %}

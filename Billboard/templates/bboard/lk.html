@@ -10,11 +10,14 @@
 
 <!-- flex-shrink can be used for responsive cases as well with the help of .flex-{sm|md|lg|xl|xxl}-shrink-{0|1} class -->
 <div class="d-flex bd-highlight">
-    <div class="w-100 p-2 bd-highlight"><h3>{{ user.username }}</h3></div>
-    <div class="flex-shrink-1 p-2 bd-highlight">{% trans "Дата регистрации" %} - {{ user.dateRegistration|date }}</div>
+    <div class="w-100 p-2 bd-highlight">
+        <h2>{% trans "Мои объявления" %}</h2>
+    </div>
+    <div class="flex-shrink-1 p-2 bd-highlight">
+        <h3>{{ user.username }}</h3>
+        {% trans "Дата регистрации" %}  {{ user.dateRegistration|date:"d-M-Y" }}
+    </div>
 </div>
-
-<p>{% trans "Мои объявления" %}</p>
 
 <a href="{% url 'adv_create' %}">
     <button type="button" class="btn btn-outline-primary">

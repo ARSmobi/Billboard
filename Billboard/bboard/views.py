@@ -17,6 +17,11 @@ class AdvertisementDetailView(DetailView):
     template_name = 'bboard/adv-detail.html'
     context_object_name = 'adv'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reactions'] = Reaction.objects.filter(advertisement=self.object).count()
+        return context
+
 
 def about_view(request):
     return render(request, 'bboard/about.html', {})
@@ -78,6 +83,17 @@ class ReactionCreateView(CreateView):
         form.instance.advertisement = adv
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class ReactionListView(DetailView):
+    model = Advertisement
+    template_name = 'bboard/reaction-list.html'
+    context_object_name = 'advertisement'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reactions'] = Reaction.objects.filter(advertisement=self.object)
+        return context
 
 
 class ReactionDetailView(DetailView):
