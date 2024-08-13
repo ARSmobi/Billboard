@@ -1,0 +1,25 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {% trans "Мой отклик" %}
+{% endblock title %}
+
+{% block content %}
+
+    <h4>{% trans "Автор" %} - <span>{{ adv.user }}</span></h4>
+    <h1>{{ adv.title }}</h1>
+    <p>{{ adv.text }}</p>
+    {{ adv.content|safe }}
+    <hr>
+    {{ my_reaction.text }}
+    {{ my_reaction.dateCreation }}
+    <div style="display: flex; justify-content: right;">
+        <a href="{% url 'reaction_edit' pk=adv.id %}">
+            <button type="button" class="btn btn-outline-primary">
+                {% trans "Редактировать" %}
+            </button>
+        </a>
+    </div>
+
+{% endblock content %}
