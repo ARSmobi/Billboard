@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {% trans "Удаление отклика" %}
+{% endblock title %}
+
+{% block content %}
+    <h4>{% trans "Вы действительно хотите удалить отклик?" %}</h4>
+    <a href="{% url 'rea_delete' pk=reaction.id %}">
+        <button type="button" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
+    </a>
+
+{% endblock content %}

@@ -1,0 +1,44 @@
+{% extends 'lk/lk.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block lk_title %}
+<h2>{% trans " Мои отклики" %}</h2>
+{% endblock lk_title %}
+
+{% block lk_content %}
+
+<a href="{% url 'lk' pk=request.user.id %}">
+    <button type="button" class="btn btn-outline-primary">
+        {% trans "Мои объявления" %}
+    </button>
+</a>
+
+<button type="button" class="btn btn-primary disabled">
+    {% trans "Мои отклики" %}
+</button>
+
+<a href="{% url 'adv_create' %}">
+    <button type="button" class="btn btn-outline-primary">
+        {% trans "Создать объявление" %}
+    </button>
+</a>
+
+{% if reactions %}
+    {% for ad in advertisements %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'my_reaction' pk=ad.id %}" class="card-link">{{ ad.title }}</a>
+                </h5>
+                <p class="card-text">{{ ad.text }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-primary" role="alert">
+        {% trans "Вы не откликнулись ни на одно объявление" %}
+    </div>
+{% endif %}
+
+{% endblock lk_content %}

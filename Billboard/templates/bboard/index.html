@@ -1,22 +1,43 @@
 {% extends 'default.html' %}
 {% load i18n %}
 {% load static %}
+
 {% block title %}
     Главная
 {% endblock title %}
 
 {% block content %}
 
+
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+        {% trans "Поиск" %}
+    </button>
+    <form method="get" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {{ filter.form.as_p }}
+        <input class="btn btn-warning" type="submit" value="{% trans 'Поиск' %}">
+    </form>
+</div>
+
 {% if advertisements %}
     {% for adv in advertisements %}
-        <h1><a href="{% url 'adv_detail' pk=adv.id %}">{{ adv.title }}</a></h1>
-        <p>{{ adv.text }}</p>
-        {{ adv.content|safe }}
+        <div class="border border-1">
+            <h1><a href="{% url 'adv_detail' pk=adv.id %}">{{ adv.title }}</a></h1>
+            <p>{{ adv.text }}</p>
+            {{ adv.content|safe }}
+        </div>
     {% endfor %}
+
+<div class="d-flex justify-content-center bd-highlight mb-2">
+    {% include "bboard/paginator.html" %}
+</div>
+
 {% else %}
+
     <div class="alert alert-primary" role="alert">
         {% trans "Объявлений пока нет" %}
     </div>
+
 {% endif %}
 
 {% endblock content %}

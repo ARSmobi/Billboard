@@ -1,0 +1,11 @@
+{% extends "default.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+<h2 class="text-white-50">{% trans "Добро пожаловать!" %}</h2>
+{% endblock title %}
+
+{% block content %}
+{{ text }}
+{% endblock content %}

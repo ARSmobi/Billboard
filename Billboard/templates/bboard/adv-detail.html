@@ -6,12 +6,21 @@
 {% endblock title %}
 
 {% block content %}
+    <h4>{% trans "Автор" %} - <span>{{ adv.user }}</span></h4>
     <h1>{{ adv.title }}</h1>
     <p>{{ adv.text }}</p>
     {{ adv.content|safe }}
     {% if adv.user != request.user %}
         <div style="display: flex; justify-content: right;">
-            <a href="{% url 'reaction_create' advertisement_id=adv.id %}"><button type="button" class="btn btn-outline-primary">{% trans "Откликнуться" %}</button></a>
+            <a href="{% if have_reaction %}
+                        {% url 'reaction_edit' pk=adv.id %}
+                     {% else %}
+                        {% url 'reaction_create' advertisement_id=adv.id %}
+                     {% endif %}">
+                <button type="button" class="btn btn-outline-primary">
+                    {% trans "Откликнуться" %}
+                </button>
+            </a>
         </div>
     {% elif adv.user == request.user %}
         <div style="display: flex; justify-content: right;">

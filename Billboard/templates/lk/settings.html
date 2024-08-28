@@ -1,0 +1,43 @@
+{% extends "lk/lk.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block lk_title %}
+<h2>{% trans " Настройки" %}</h2>
+{% endblock lk_title %}
+
+{% block lk_content %}
+<div  class="col d-flex justify-content-center bd-highlight mb-2">
+    <a href="{% url 'settings_avatar' pk=user.id %}">
+        <img height="80px" src="{% static 'avatar/'|add:user.avatar %}" alt="avatar">
+    </a>
+</div>
+<div class="d-flex justify-content-center bd-highlight mb-2">
+    <div class="p-4 row row-cols-2">
+        <div class="p-1 col text-end">{% trans "Псевдоним пользователя" %}</div>
+        <div class="p-1 col">{{ user.username }}</div>
+
+        <div class="p-1 col text-end">{% trans "Имя" %}</div>
+        <div class="p-1 col">{{ user.first_name }}</div>
+
+        <div class="p-1 col text-end">{% trans "Фамилия" %}</div>
+        <div class="p-1 col">{{ user.last_name }}</div>
+
+        <div class="p-1 col text-end">{% trans "E-mail" %}</div>
+        <div class="p-1 col">{{ user.email }}</div>
+
+        <div class="p-1 col text-end">{% trans "Дата рождения" %}</div>
+        <div class="p-1 col">{% if user.birthday %}{{ user.birthday|date:"d-m-Y" }}{% endif %}</div>
+
+        <div class="p-1 col text-end">{% trans "Пол" %}</div>
+        <div class="p-1 col">{% if user.gender == "m" %}{% trans "Мужской" %}{% else %}{% trans "Женский" %}{% endif %}</div>
+    </div>
+</div>
+<div  class="col d-flex justify-content-center bd-highlight mb-2">
+    <a href="{% url 'lk_settings_edit' pk=user.id %}">
+        <button class="btn btn-outline-primary" type="submit" value="{% trans 'Откликнуться' %}">
+            {% trans "Редактировать" %}
+        </button>
+    </a>
+</div>
+{% endblock lk_content %}

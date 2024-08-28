@@ -10,7 +10,10 @@
     {% for reaction in reactions %}
         {{ reaction.text }}
         {{ reaction.dateCreation|date:"d-M-Y" }}
+        <a href="{% url 'reaction_detail' pk=reaction.id %}"> >>> </a>
         <hr>
     {% endfor %}
+
+{% include "bboard/paginator.html" %}
 
 {% endblock content %}

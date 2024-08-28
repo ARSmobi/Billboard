@@ -1,29 +1,28 @@
-{% extends 'default.html' %}
+{% extends "lk/lk.html" %}
 {% load i18n %}
 {% load static %}
 
-{% block title %}
-    MMORPG | lk
-{% endblock title %}
+{% block lk_title %}
+<h2>{% trans " Мои объявления" %}</h2>
+{% endblock lk_title %}
 
-{% block content %}
+{% block lk_content %}
+<button type="button" class="btn btn-primary disabled">
+    {% trans "Мои объявления" %}
+</button>
 
-<!-- flex-shrink can be used for responsive cases as well with the help of .flex-{sm|md|lg|xl|xxl}-shrink-{0|1} class -->
-<div class="d-flex bd-highlight">
-    <div class="w-100 p-2 bd-highlight">
-        <h2>{% trans "Мои объявления" %}</h2>
-    </div>
-    <div class="flex-shrink-1 p-2 bd-highlight">
-        <h3>{{ user.username }}</h3>
-        {% trans "Дата регистрации" %}  {{ user.dateRegistration|date:"d-M-Y" }}
-    </div>
-</div>
+<a href="{% url 'my_reactions' pk=request.user.id %}">
+    <button type="button" class="btn btn-outline-primary">
+        {% trans "Мои отклики" %}
+    </button>
+</a>
 
 <a href="{% url 'adv_create' %}">
     <button type="button" class="btn btn-outline-primary">
         {% trans "Создать объявление" %}
     </button>
 </a>
+
 {% if advertisements %}
     {% for adv in advertisements %}
         <div class="card">
@@ -39,5 +38,4 @@
         {% trans "Вы не создали ни одного объявления" %}
     </div>
 {% endif %}
-
-{% endblock content %}
+{% endblock lk_content %}

@@ -14,10 +14,15 @@
     <hr>
     {{ my_reaction.text }}
     {{ my_reaction.dateCreation }}
+    <div>
+        {% if my_reaction.accepted %}
+            <span class="badge bg-success">{% trans "Отклик принят" %}</span>
+        {% endif %}
+    </div>
     <div style="display: flex; justify-content: right;">
-        <a href="{% url 'reaction_edit' pk=adv.id %}">
+        <a href="{% url 'reaction_edit' pk=my_reaction.id %}">
             <button type="button" class="btn btn-outline-primary">
-                {% trans "Редактировать" %}
+                {% trans "Редактировать отклик" %}
             </button>
         </a>
     </div>

@@ -1,6 +1,7 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import AbstractUser
+from django.core.mail import send_mail
 
 
 class User(AbstractUser):
@@ -9,7 +10,8 @@ class User(AbstractUser):
         ('f', 'Женщина'),
     )
     gender = models.CharField(max_length=1, choices=GENDER, default='')
-    dateRegistration = models.DateTimeField(auto_now_add=True)
+    birthday = models.DateTimeField(null=True)
+    avatar = models.CharField(max_length=20, default='default.svg')
 
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
@@ -37,3 +39,16 @@ class Reaction(models.Model):
     text = models.TextField()
     accepted = models.BooleanField(default=False)
     dateCreation = models.DateTimeField(auto_now_add=True)
+
+    def accept(self):
+        adv = Advertisement.objects.get(id=self.advertisement.id)
+        subject = f'Отклик принят'
+        message = f'Ваш отклик на объявление {adv.title} был принят.'
+        from_email = 'note@site.ru'
+        to_email = User.objects.get(id=self.user.id).email
+        if self.accepted:
+            self.accepted = False
+        else:
+            self.accepted = True
+            send_mail(subject, message, from_email, [to_email])
+        self.save()

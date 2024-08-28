@@ -1,0 +1,17 @@
+{% extends "lk/lk.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block lk_title %}
+<h2>{% trans " Настройки" %}</h2>
+{% endblock lk_title %}
+
+{% block lk_content %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-outline-primary" type="submit" value="{% trans 'Сохранить' %}">
+</form>
+
+{% endblock lk_content %}
