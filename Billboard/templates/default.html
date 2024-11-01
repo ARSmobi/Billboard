@@ -3,13 +3,13 @@
 {% load static %}
 {% load my_tags %}
 
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>MMORPG Bulletin board</title>
+    <title>MMORPG Bulletin board | {% block title %}{% endblock title %}</title>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <style>
@@ -19,6 +19,14 @@
             scale: 120%;
             transition: 1s;
             color: blue;}
+        .text-user {
+            color: orange;
+            transition: 0.5s;
+        }
+        .text-user-active {
+            color: red;
+            transition: 0.5s;
+        }
     </style>
 </head>
 <body style="background-image: url('{% static 'bootstrap/img/header4.png' %}'); background-attachment: fixed;">
@@ -27,13 +35,17 @@
     <!-- Responsive navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="logo navbar-brand" href="/" style="font-weight: 100; font-size: 30px;"><span style="font-weight: 700;">MMORPG</span> Bulletin board</a>
+            <a class="logo navbar-brand" href="{% url 'home' %}" style="font-weight: 100; font-size: 30px;"><span style="font-weight: 700;">MMORPG</span> Bulletin board</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="font-size: 24px;">
                     {% if request.user.username %}
-                    <li class="nav-item">{{ user_id }}
-                        <a class="nav-link {% if request.path == '/lk/'|join:request.user.id %}active{% endif %}" aria-current="page" href="{% url 'lk' pk=request.user.id %}">{{ request.user.username }}</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/lk/'|join:request.user.id %}text-user-active{% else %}text-user{% endif %}" aria-current="page" href="{% url 'lk' pk=request.user.id %}">
+                            {% if not request.user.first_name and not request.user.last_name %}{{ request.user.username }}{% endif %}
+                            {{ request.user.first_name }}
+                            {{ request.user.last_name }}
+                        </a></li>
                     {% endif %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/advertisements/' %}active{% endif %}" aria-current="page" href="{% url 'index' %}">{% trans "Все объявления" %}</a></li>
@@ -53,9 +65,6 @@
         </div>
     </nav>
 </header>
-
-{% block title %}
-{% endblock title %}
 
 <div style="color: white; background: rgba(00,20,39,0.7);">
     {% block content %}

@@ -1,5 +1,6 @@
 from django import template
 from django.urls import reverse
+from ..utils import is_user_online
 
 register = template.Library()
 
@@ -20,3 +21,10 @@ def url_replace(context, **kwargs):
 @register.simple_tag(name='redirect')
 def url_redirect(url):
     return reverse(url)
+
+
+@register.simple_tag(name='is_user_online')
+def _is_user_online(user):
+    if is_user_online(user):
+        return '#0f0'
+    return '#f00'

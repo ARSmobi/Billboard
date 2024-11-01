@@ -3,9 +3,15 @@
 {% load static %}
 
 {% block title %}
-<h2 class="text-white-50">{% trans "Добро пожаловать!" %}</h2>
+{% trans "Добро пожаловать!" %}
 {% endblock title %}
 
 {% block content %}
-{{ text }}
+
+<div style="margin: 10px;">
+    {{ text }}
+</div>
+
+{{ online_users }}
+
 {% endblock content %}

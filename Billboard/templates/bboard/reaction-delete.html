@@ -7,8 +7,9 @@
 
 {% block content %}
     <h4>{% trans "Вы действительно хотите удалить отклик?" %}</h4>
-    <a href="{% url 'rea_delete' pk=reaction.id %}">
-        <button type="button" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
-    </a>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
+    </form>
 
 {% endblock content %}

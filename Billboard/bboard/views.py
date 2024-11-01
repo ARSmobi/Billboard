@@ -1,5 +1,7 @@
 from os import walk
 
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.shortcuts import redirect, HttpResponseRedirect
@@ -8,7 +10,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .forms import AdvertisementForm, ReactionForm, UserSettingsForm
-from .models import Advertisement, Reaction, User
+from .models import Advertisement, Reaction, User, Subscription, Category
 from .filters import AdvertisementFilter
 from .mixins import AuthorRequiredMixin
 
@@ -28,6 +30,7 @@ class HomeView(TemplateView):
 
 class AdvertisementListView(ListView):
     model = Advertisement
+    filterset_class = AdvertisementFilter
     template_name = 'bboard/index.html'
     context_object_name = 'advertisements'
     paginate_by = 5
@@ -35,6 +38,37 @@ class AdvertisementListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        sort_by = self.request.GET.get('sort', 'dateCreation')
+        if sort_by == 'date_ask':
+            queryset = queryset.order_by('dateCreation')
+        else:
+            queryset = queryset.order_by('-dateCreation')
+        self.filterset = AdvertisementFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+        context['filter'] = AdvertisementFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
+
+class UserAdvertisementListView(ListView):
+    model = Advertisement
+    filterset_class = AdvertisementFilter
+    template_name = 'bboard/user-advs.html'
+    context_object_name = 'advertisements'
+    paginate_by = 5
+    ordering = '-dateCreation'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(user=self.kwargs['user_id'])
+        sort_by = self.request.GET.get('sort', 'dateCreation')
+        if sort_by == 'date_ask':
+            queryset = queryset.order_by('dateCreation')
+        else:
+            queryset = queryset.order_by('-dateCreation')
         self.filterset = AdvertisementFilter(self.request.GET, queryset)
         return self.filterset.qs
 
@@ -52,8 +86,11 @@ class AdvertisementDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['is_subscribed'] = Subscription.objects.filter(tag=f'user{self.request.user.id}-user{self.object.user.id}').exists()
         context['reactions'] = Reaction.objects.filter(advertisement=self.object).count()
         context['have_reaction'] = Reaction.objects.filter(user=self.request.user.id, advertisement=self.object).exists()
+        if Reaction.objects.filter(user=self.request.user, advertisement=self.kwargs['pk']).exists():
+            context['reaction_id'] = Reaction.objects.get(user=self.request.user, advertisement=self.kwargs['pk']).id
         return context
 
 
@@ -142,7 +179,6 @@ class SettingsAvatarView(TemplateView):
 def change_avatar_view(request, pk):
     user = User.objects.get(id=pk)
     avatar = request.GET.get('avatar')
-    print(avatar)
     user.avatar = avatar
     user.save()
     return redirect('lk_settings', request.user.id)
@@ -170,6 +206,7 @@ class ReactionCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_adv'] = get_object_or_404(Advertisement, id=self.kwargs['advertisement_id'])
+        context['have_reaction'] = Reaction.objects.filter(advertisement=self.kwargs['advertisement_id']).exists()
         return context
 
 
@@ -181,7 +218,8 @@ class ReactionUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['current_adv'] = get_object_or_404(Advertisement, id=self.kwargs['pk'])
+        current_adv = get_object_or_404(Advertisement, id=self.object.advertisement.pk)
+        context['current_adv'] = current_adv
         return context
 
     def get_success_url(self):
@@ -193,7 +231,16 @@ class ReactionListView(LoginRequiredMixin, AuthorRequiredMixin, DetailView):
     model = Advertisement
     template_name = 'bboard/reaction-list.html'
     context_object_name = 'advertisement'
-    paginate_by = 1
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        sort_date = self.request.GET.get('sort', 'dateCreation')
+        if sort_date == 'date_ask':
+            queryset = queryset.order_by('dateCreation')
+        else:
+            queryset = queryset.order_by('-dateCreation')
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -213,7 +260,8 @@ class ReactionDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ReactionDeleteView(DeleteView):
+class ReactionDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = ('bboard.delete_reaction',)
     model = Reaction
     template_name = 'bboard/reaction-delete.html'
     context_object_name = 'reaction'
@@ -230,21 +278,21 @@ def reaction_accept(request, reaction_id):
 class MyReactionslistView(ListView):
     model = Advertisement
     template_name = 'lk/my-reactions.html'
-    context_object_name = 'adv'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         reactions = Reaction.objects.filter(user=self.request.user.id)
         context['reactions'] = reactions
-        adv = []
+        advertisements = {}
         for reaction in reactions:
             r_id = reaction.advertisement.id
-            adv.append(Advertisement.objects.get(id=r_id))
-        context['advertisements'] = adv
+            advertisements[(Advertisement.objects.get(id=reaction.advertisement.id))] = r_id
+        context['advertisements'] = advertisements
+
         return context
 
 
-class MyReactionDetailView(DetailView):
+class MyReactionDetailView(LoginRequiredMixin, DetailView):
     model = Advertisement
     template_name = 'bboard/my-reaction.html'
     context_object_name = 'adv'
@@ -253,3 +301,28 @@ class MyReactionDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['my_reaction'] = Reaction.objects.get(user=self.request.user.id, advertisement=self.object)
         return context
+
+
+class TestView(CreateView):
+    model = User
+    template_name = 'bboard/test.html'
+    form_class = UserSettingsForm
+    context_object_name = 'user'
+
+
+def subscription(request, adv_id):
+    user = User.objects.get(id=request.user.id)
+    to = request.GET.get('to')
+    content_type = None
+    if to == 'user':
+        content_type = ContentType.objects.get_for_model(User)
+    elif request.GET.get('to') == 'category':
+        content_type = ContentType.objects.get_for_model(Category)
+    to_id = request.GET.get('to_id')
+    action = request.GET.get('action')
+    if action == 'create':
+        Subscription.objects.create(user=user, content_type=content_type, object_id=to_id, tag=f'user{user.pk}-{to}{to_id}')
+    else:
+        Subscription.objects.filter(tag=f'user{user.pk}-{to}{to_id}').delete()
+    url = reverse('adv_detail', args=[adv_id])
+    return HttpResponseRedirect(url)

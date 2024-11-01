@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 from .models import Advertisement, Reaction, User
 
@@ -15,12 +17,12 @@ class ReactionForm(forms.ModelForm):
 
 
 class UserSettingsForm(forms.ModelForm):
+    now = datetime.now()
+    birthday = forms.DateField(widget=forms.SelectDateWidget(years=range(1950, now.year - 5)))
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'gender', 'birthday']
-        widgets = {
-            'birthday': forms.SelectDateWidget()
-        }
 
 
 class UserAvatarForm(forms.ModelForm):

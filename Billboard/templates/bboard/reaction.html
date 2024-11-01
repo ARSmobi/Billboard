@@ -19,8 +19,10 @@
     <a href="{% url 'adv_detail' pk=current_adv.id %}">
         <button type="button" class="btn btn-outline-warning">{% trans "Отмена" %}</button>
     </a>
-    <a href="{% url 'reaction_delete' pk=current_adv.id %}">
-        <button type="button" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
-    </a>
+    {% if have_reaction %}
+        <a href="{% url 'reaction_delete' pk=reaction.id %}">
+                <button type="button" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
+        </a>
+    {% endif %}
 
 {% endblock content %}

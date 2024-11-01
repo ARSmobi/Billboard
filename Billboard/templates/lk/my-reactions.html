@@ -19,19 +19,19 @@
 </button>
 
 <a href="{% url 'adv_create' %}">
-    <button type="button" class="btn btn-outline-primary">
+    <button type="button" class="btn btn-outline-success btn-create-adv">
         {% trans "Создать объявление" %}
     </button>
 </a>
 
 {% if reactions %}
-    {% for ad in advertisements %}
-        <div class="card">
+    {% for adv, r_id in advertisements.items %}
+        <div class="card opacity-75">
             <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{% url 'my_reaction' pk=ad.id %}" class="card-link">{{ ad.title }}</a>
-                </h5>
-                <p class="card-text">{{ ad.text }}</p>
+                <h5 class="card-title">{{ adv.title }}</h5>
+                <p class="card-text">{{ adv.text }}</p>
+                <a href="{% url 'adv_detail' pk=adv.id %}" class="btn btn-primary bg-gradient">{% trans "Подробнее" %}</a>
+                <a href="{% url 'my_reaction' pk=r_id %}" class="btn btn-secondary bg-gradient">{% trans "Показать отклик" %}</a>
             </div>
         </div>
     {% endfor %}

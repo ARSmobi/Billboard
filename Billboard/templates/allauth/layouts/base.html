@@ -17,7 +17,7 @@
     <body>
 
     <header style="height: 300px; background-image: url('{% static 'bootstrap/img/header3.jpg' %}')">
-        <a class="navbar-brand" href="/home/" style="font-weight: 100; font-size: 36px;"><span style="font-weight: 700;">MMORPG</span> Bulletin board</a>
+        <a class="navbar-brand" href="{% url 'home' %}" style="font-weight: 100; font-size: 36px;"><span style="font-weight: 700;">MMORPG</span> Bulletin board</a>
     </header>
 
         {% block body %}

@@ -8,19 +8,13 @@
 {% endblock title %}
 
 {% block content %}
-
 <div class="d-flex justify-content-between bd-highlight mb-2">
     <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle bg-gradient" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             {% trans "Поиск" %}
         </button>
         <form method="get" class="dropdown-menu p-2 row" aria-labelledby="dropdownMenuButton">
-            <div class="row mb-2">
-                <label for="{{ filter.form.user.id_for_label }}" class="col-sm-2 col-form-label">{% trans "Автор" %}</label>
-                <div class="dropdown-item col-sm-10">
-                    <input type="text" class="form-control" id="{{ filter.form.user.id_for_label }}">
-                </div>
-            </div>
+            {{ filter.form.as_p }}
             <div class="row mb-2">
                 <label for="{{ filter.form.title.id_for_label }}" class="col-sm-2 col-form-label">{% trans "Заголовок" %}</label>
                 <div class="dropdown-item col-sm-10">
@@ -48,7 +42,7 @@
 </div>
 {% if advertisements %}
     <div style="margin: 20px;">
-    {% for adv in filter.qs %}
+    {% for adv in advertisements %}
         <div class="card opacity-75" style="margin-bottom: 10px;">
             <div class="card-header bg-primary bg-gradient">
                 <img height="50px" src="{% static 'avatar/'|add:adv.user.avatar %}" alt="avatar" style="border: 2px solid {% is_user_online adv.user %}; border-radius: 25px; padding: 3px; box-shadow: 0px 0px 5px 1px {% is_user_online adv.user %};">

@@ -1,18 +1,19 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import (AdvertisementListView, AdvertisementDetailView, HomeView,
+from .views import (AdvertisementListView, UserAdvertisementListView, AdvertisementDetailView, HomeView,
                     AdvertisementCreateView, AdvertisementUpdateView, AdvertisementDeleteView,
                     LkDetailView, LkSettingsDetailView, LkSettingsUpdateView, SettingsAvatarView, change_avatar_view,
                     about_view, contacts_view,
                     ReactionCreateView, ReactionDetailView, ReactionDeleteView,
                     ReactionListView, MyReactionslistView, MyReactionDetailView,
                     reaction_accept,
-                    ReactionUpdateView)
+                    ReactionUpdateView, subscription, TestView)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('advertisements/', AdvertisementListView.as_view(), name='index'),
+    path('user/<int:user_id>/advertisements', UserAdvertisementListView.as_view(), name='user_advs'),
     path('about/', about_view, name='about'),
     path('contacts/', contacts_view, name='contacts'),
     path('advertisement/<int:pk>', AdvertisementDetailView.as_view(), name='adv_detail'),
@@ -33,4 +34,6 @@ urlpatterns = [
     path('reaction/<int:pk>/edit', ReactionUpdateView.as_view(), name='reaction_edit'),
     path('reaction/<int:reaction_id>/accept', reaction_accept, name='reaction_accept'),
     path('access_denied/', TemplateView.as_view(template_name='bboard/403.html'), name='page403'),
+    path('subscription/<int:adv_id>', subscription, name='subscription'),
+    path('test', TestView.as_view(), name='test'),
 ]

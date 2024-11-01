@@ -1,5 +1,8 @@
 import os.path
+from os import getenv
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$geik+x@)1h&7ol7lmj2vmpy)xf!@d4*h*p^j0y8(lrrn@=dm0'
+SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'bboard.middleware.UpdateLastActivityMiddleware',
 ]
 
 ROOT_URLCONF = 'Billboard.urls'
@@ -69,7 +73,7 @@ WSGI_APPLICATION = 'Billboard.wsgi.application'
 
 SITE_ID = 1
 
-SITE_URL = 'http://127.0.0.1:8000/'
+SITE_URL = getenv('SITE_URL')
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -115,6 +119,8 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_USERNAME = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignupForm'}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
