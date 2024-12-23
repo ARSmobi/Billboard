@@ -16,8 +16,13 @@
         {{ form.as_p }}
         <input class="btn btn-outline-primary" type="submit" value="{% trans 'Откликнуться' %}">
     </form>
-    <a href="{% url 'adv_detail' pk=request.user.id %}">
+    <a href="{% url 'adv_detail' pk=current_adv.id %}">
         <button type="button" class="btn btn-outline-warning">{% trans "Отмена" %}</button>
     </a>
+    {% if have_reaction %}
+        <a href="{% url 'reaction_delete' pk=reaction.id %}">
+                <button type="button" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
+        </a>
+    {% endif %}
 
 {% endblock content %}

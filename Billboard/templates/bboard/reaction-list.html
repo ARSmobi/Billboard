@@ -2,15 +2,40 @@
 {% load i18n %}
 {% load static %}
 {% block title %}
-    {{ advertisement.title }}
+    {{ advertisement.title|truncatechars:20 }}
 {% endblock title %}
 
 {% block content %}
 
+    <div class="d-flex justify-content-end bd-highlight mb-2">
+        <div class="btn-group dropstart">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                {% trans "Сортировать" %}
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="?sort=date_desk">{% trans "сначала новые" %}</a></li>
+                <li><a class="dropdown-item" href="?sort=date_ask">{% trans "сначала старые" %}</a></li>
+            </ul>
+        </div>
+    </div>
+
     {% for reaction in reactions %}
-        {{ reaction.text }}
-        {{ reaction.dateCreation|date:"d-M-Y" }}
-        <hr>
+        <div class="card opacity-75" style="margin-bottom: 10px;">
+            <div class="card-header bg-primary bg-gradient">
+                <img height="50px" src="{% static 'avatar/'|add:reaction.user.avatar %}" alt="avatar" style="border: 1px solid white; border-radius: 25px; padding: 3px">
+                {% if not reaction.user.first_name and not reaction.user.last_name %}{{ reaction.user.username }}{% endif %}
+                {{ reaction.user.first_name }}
+                {{ reaction.user.last_name }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ reaction.text|truncatewords:6 }}</h5>
+                <p class="card-text">{{ reaction.dateCreation|date:"d-M-Y" }}</p>
+                <a href="{% url 'reaction_detail' pk=reaction.id %}" class="btn btn-secondary bg-gradient">{% trans "Показать отклик" %}</a>
+            </div>
+        </div>
+
     {% endfor %}
+
+{% include "bboard/paginator.html" %}
 
 {% endblock content %}

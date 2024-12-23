@@ -1,0 +1,52 @@
+{% extends "lk/lk.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block lk_title %}
+<h2>{% trans " Мои объявления" %}</h2>
+{% endblock lk_title %}
+
+{% block lk_content %}
+
+<style>
+    .btn-create-adv {
+        content: "+";
+    }
+    .btn-create-adv:hover {
+        content: "{% trans 'Создать объявление' %}";
+    }
+</style>
+
+<button type="button" class="btn btn-primary disabled">
+    {% trans "Мои объявления" %}
+</button>
+
+<a href="{% url 'my_reactions' pk=request.user.id %}">
+    <button type="button" class="btn btn-outline-primary">
+        {% trans "Мои отклики" %}
+    </button>
+</a>
+
+<a href="{% url 'adv_create' %}">
+    <button type="button" class="btn btn-outline-success btn-create-adv">
+        {% trans "Создать объявление" %}
+    </button>
+</a>
+
+{% if advertisements %}
+    {% for adv in advertisements %}
+        <div class="card opacity-75" style="margin: 5px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ adv.title }}</h5>
+                <p class="card-text">{{ adv.text }}</p>
+                <a href="{% url 'adv_detail' pk=adv.id %}" class="btn btn-primary bg-gradient">{% trans "Подробнее" %}</a>
+                <a href="{% url 'adv_edit' pk=adv.id %}" class="btn btn-outline-primary bg-gradient">{% trans "Редактировать" %}</a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-primary" role="alert">
+        {% trans "Вы не создали ни одного объявления" %}
+    </div>
+{% endif %}
+{% endblock lk_content %}

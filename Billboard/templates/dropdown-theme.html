@@ -1,0 +1,15 @@
+{% load static %}
+
+{% with night_city="bootstrap/img/night_city.jpg" autumn="bootstrap/img/autumn.jpg" autumn_flowers="bootstrap/img/autumn_flowers.jpg" galaxy="bootstrap/img/galaxy.jpg" %}
+{% endwith %}
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuDark" data-bs-toggle="dropdown" aria-expanded="false">
+        Background
+    </button>
+    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuDark">
+        <li><a class="dropdown-item" href="#">Autumn</a></li>
+        <li><a class="dropdown-item" href="#">Autumn flowers</a></li>
+        <li><a class="dropdown-item" href="#">Galaxy</a></li>
+        <li><a class="dropdown-item" href="#">Night city</a></li>
+    </ul>
+</div>

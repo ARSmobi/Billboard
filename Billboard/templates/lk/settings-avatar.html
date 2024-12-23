@@ -1,0 +1,25 @@
+{% extends "lk/lk.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block lk_title %}
+<h2>{% trans " Выберите аватарку" %}</h2>
+{% endblock lk_title %}
+
+{% block lk_content %}
+
+<!-- flex-wrap can be used for responsive cases as well with the help of .flex-{sm|md|lg|xl|xxl}-wrap class -->
+    <div class="d-flex flex-wrap bd-highlight">
+        {% for avatar in avatars %}
+        <form action="{% url 'change_avatar' pk=request.user.id %}">
+            <div class="p-2 bd-highlight">
+                <input type="hidden" name="avatar" value="{{ avatar }}">
+                <button type="submit">
+                    <img width="100px" src="{% static 'avatar/'|add:avatar %}" alt="{{avatar}}">
+                </button>
+            </div>
+        </form>
+        {% endfor %}
+    </div>
+
+{% endblock lk_content %}

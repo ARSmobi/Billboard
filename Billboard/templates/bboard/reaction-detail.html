@@ -1,10 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'default.html' %}
+{% load i18n %}
+{% load my_tags %}
+{% load static %}
+{% block title %}
+    {% trans "Отклик" %}
+{% endblock title %}
+
+{% block content %}
+{% if request.user.id == adv_author %}
+
+    <div class="card opacity-75" style="margin-bottom: 10px;">
+        <div class="card-header bg-primary bg-gradient">
+            <img height="50px" src="{% static 'avatar/'|add:reaction.user.avatar %}" alt="avatar" style="border: 1px solid white; border-radius: 25px; padding: 3px">
+            {% if not adv.user.first_name and not adv.user.last_name %}{{ adv.user.username }}{% endif %}
+            {{ reaction.user.first_name }}
+            {{ reaction.user.last_name }}
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ reaction.text }}</p>
+        </div>
+        <div class="card-footer text-muted bg-secondary bg-gradient d-flex justify-content-between">
+            <div class="card-text">{{ reaction.dateCreation|date:"d-M-Y" }}</div>
+            {% if not reaction.accepted %}
+                <div style="display: flex; justify-content: right;">
+                    <a href="{% url 'reaction_accept' reaction_id=reaction.id %}">
+                        <button type="button" class="btn btn-success">
+                            {% trans "Принять" %}
+                        </button>
+                    </a>
+                </div>
+            {% else %}
+                <div style="display: flex; justify-content: right;">
+                    <a href="{% url 'reaction_accept' reaction_id=reaction.id %}">
+                        <button type="button" class="btn btn-outline-warning">
+                            {% trans "Отклонить" %}
+                        </button>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% else %}
+
+<script type="text/javascript">
+        // Время задержки перед перенаправлением в миллисекундах
+        var delay = 3000; // 3 секунды
+        // URL, на который будет осуществлено перенаправление
+        var redirectUrl = "{% redirect 'page403' %}"; // Имя маршрута
+
+        setTimeout(function() {
+            window.location.href = redirectUrl;
+        });
+    </script>
+
+{% endif %}
+
+{% endblock content %}

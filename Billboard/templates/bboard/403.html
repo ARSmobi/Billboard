@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>403 {% trans "Страница не доступна" %}</title>
+</head>
+<body>
+<h1>{% trans "Страница не доступна для вас!" %} :/</h1>
+<img width="60%" src="{% static 'bootstrap/img/page403.png' %}" alt="Access denied">
+</body>
+</html>

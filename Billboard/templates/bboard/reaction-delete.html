@@ -1,0 +1,15 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {% trans "Удаление отклика" %}
+{% endblock title %}
+
+{% block content %}
+    <h4>{% trans "Вы действительно хотите удалить отклик?" %}</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">{% trans "Удалить" %}</button>
+    </form>
+
+{% endblock content %}

@@ -1,26 +1,71 @@
 {% extends 'default.html' %}
 {% load i18n %}
 {% load static %}
+{% load my_tags %}
+
 {% block title %}
-    {{ advertisement.title }}
+    {{ adv.title|truncatechars:20 }}
 {% endblock title %}
 
 {% block content %}
-    <h1>{{ adv.title }}</h1>
-    <p>{{ adv.text }}</p>
-    {{ adv.content|safe }}
-    {% if adv.user != request.user %}
-        <div style="display: flex; justify-content: right;">
-            <a href="{% url 'reaction_create' advertisement_id=adv.id %}"><button type="button" class="btn btn-outline-primary">{% trans "Откликнуться" %}</button></a>
+
+    <div class="card opacity-75" style="margin: 20px;">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+            <div>
+                <img height="50px" src="{% static 'avatar/'|add:adv.user.avatar %}" alt="avatar" style="border: 2px solid {% is_user_online adv.user %}; border-radius: 25px; padding: 3px; box-shadow: 0px 0px 5px 1px {% is_user_online adv.user %};">
+                {% if not adv.user.first_name and not adv.user.last_name %}{{ adv.user.username }}{% endif %}
+                {{ adv.user.first_name }}
+                {{ adv.user.last_name }}
+            </div>
+            <div>
+                {{ s_tag }}
+                {% if adv.user.id != request.user.id %}
+                    {% if not is_subscribed %}
+                        <a href="{% url 'subscription' adv_id=adv.id %}?to=user&to_id={{adv.user.id}}&action=create">
+                            <button type="button" class="btn btn-danger bg-gradient">{% trans "Подписаться" %}</button>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'subscription' adv_id=adv.id %}?to=user&to_id={{adv.user.id}}&tag=user{{request.user.id}}-user{{adv.user.id}}&action=delete">
+                            <button type="button" class="btn btn-outline-danger bg-gradient">{% trans "Отписаться" %}</button>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
-    {% elif adv.user == request.user %}
-        <div style="display: flex; justify-content: right;">
-            <a href="{% url 'reaction_list' pk=adv.id %}">
-                <button type="button" class="btn btn-outline-info">
-                    {% trans "Откликнувшиеся" %}: {{ reactions }}
-                </button>
+        <div class="card-body">
+            <h5 class="card-title">{{ adv.title }}</h5>
+            <p class="card-text">{{ adv.text }}</p>
+            <p class="card-text">{{ adv.content|safe }}</p>
+            {% if adv.user != request.user %}
+                <div style="display: flex; justify-content: right;">
+                    <a href="{% if have_reaction %}
+                                {% url 'reaction_edit' pk=reaction_id %}
+                             {% else %}
+                                {% url 'reaction_create' advertisement_id=adv.id %}
+                             {% endif %}">
+                        <button type="button" class="btn btn-outline-primary">
+                            {% if have_reaction %}{% trans "Редактировать отклик" %}{% else %}{% trans "Откликнуться" %}{% endif %}
+                        </button>
+                    </a>
+                </div>
+            {% elif adv.user == request.user %}
+                <div style="display: flex; justify-content: right;">
+                    <a href="{% url 'reaction_list' pk=adv.id %}">
+                        <button type="button" class="btn btn-outline-info">
+                            {% trans "Откликнувшиеся" %}: {{ reactions }}
+                        </button>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-transparent d-flex justify-content-between">
+            <p>{{ adv.dateCreation|date:"d-M-Y" }}</p>
+            {% if request.user.id != adv.user.id %}
+            <a href="{% url 'user_advs' user_id=adv.user.id %}">
+                <button class="btn btn-info bg-gradient">{% trans "Все объявления пользователя" %}</button>
             </a>
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
 
 {% endblock content %}

@@ -1,0 +1,17 @@
+{% extends "default.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans "Добро пожаловать!" %}
+{% endblock title %}
+
+{% block content %}
+
+<div style="margin: 10px;">
+    {{ text }}
+</div>
+
+{{ online_users }}
+
+{% endblock content %}

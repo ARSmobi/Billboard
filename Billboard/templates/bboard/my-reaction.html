@@ -1,0 +1,51 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {% trans "Мой отклик" %}
+{% endblock title %}
+
+{% block content %}
+
+    <div class="card opacity-75" style="margin-bottom: 10px;">
+        <div class="card-header bg-primary bg-gradient">
+            <img height="50px" src="{% static 'avatar/'|add:adv.user.avatar %}" alt="avatar" style="border: 1px solid white; border-radius: 25px; padding: 3px">
+            {% if not adv.user.first_name and not adv.user.last_name %}{{ adv.user.username }}{% endif %}
+            {{ adv.user.first_name }}
+            {{ adv.user.last_name }}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ adv.title }}</h5>
+            <p class="card-text">{{ adv.text|truncatechars:20 }}</p>
+            <a href="{% url 'adv_detail' pk=adv.id %}" class="btn btn-primary bg-gradient">{% trans "Подробнее" %}</a>
+        </div>
+        <div class="card-footer text-muted bg-secondary bg-gradient">
+            {{ adv.dateCreation|date:"d-M-Y" }}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="card opacity-75 {% if my_reaction.accepted %} bg-success text-white {% else %} bg-warning {% endif %}" style="margin-bottom: 10px;">
+        <div class="card-body">
+            <p class="card-text">{{ my_reaction.text }}</p>
+        </div>
+        <div class="card-footer text-muted bg-secondary bg-gradient d-flex justify-content-between">
+            <div>{{ my_reaction.dateCreation|date:"d-M-Y" }}</div>
+            <div>
+                {% if not my_reaction.accepted %}
+                <a href="{% url 'reaction_edit' pk=my_reaction.id %}">
+                    <button type="button" class="btn btn-outline-warning">
+                        {% trans "Редактировать отклик" %}
+                    </button>
+                </a>
+                {% else %}
+                    <button type="button" class="btn btn-success">
+                        {% trans "Отклик принят" %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
