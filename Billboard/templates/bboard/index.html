@@ -51,8 +51,14 @@
     {% for adv in filter.qs %}
         <div class="card opacity-75" style="margin-bottom: 10px;">
             <div class="card-header bg-primary bg-gradient">
-                <img height="50px" src="{% static 'avatar/'|add:adv.user.avatar %}" alt="avatar" style="border: 2px solid {% is_user_online adv.user %}; border-radius: 25px; padding: 3px; box-shadow: 0px 0px 5px 1px {% is_user_online adv.user %};">
-                {% if not adv.user.first_name and not adv.user.last_name %}{{ adv.user.username }}{% endif %}
+                <img height="50px" src="{% static 'avatar/'|add:adv.user.avatar %}" 
+                     alt="avatar" style="border: 2px solid {% is_user_online adv.user %}; 
+                                         border-radius: 25px; 
+                                         padding: 3px; 
+                                         box-shadow: 0px 0px 5px 1px {% is_user_online adv.user %};">
+                {% if not adv.user.first_name and not adv.user.last_name %}
+                    {{ adv.user.username }}
+                {% endif %}
                 {{ adv.user.first_name }}
                 {{ adv.user.last_name }}
             </div>

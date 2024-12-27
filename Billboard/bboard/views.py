@@ -16,6 +16,7 @@ from .mixins import AuthorRequiredMixin
 
 
 class HomeView(TemplateView):
+    """Домашняя страница"""
     template_name = 'bboard/home.html'
 
     def get_context_data(self, **kwargs):
@@ -29,6 +30,7 @@ class HomeView(TemplateView):
 
 
 class AdvertisementListView(ListView):
+    """Список объявлений"""
     model = Advertisement
     filterset_class = AdvertisementFilter
     template_name = 'bboard/index.html'
@@ -54,6 +56,7 @@ class AdvertisementListView(ListView):
 
 
 class UserAdvertisementListView(ListView):
+    """Список объявлений пользователя"""
     model = Advertisement
     filterset_class = AdvertisementFilter
     template_name = 'bboard/user-advs.html'
@@ -80,6 +83,7 @@ class UserAdvertisementListView(ListView):
 
 
 class AdvertisementDetailView(DetailView):
+    """Детальная страница объявления"""
     model = Advertisement
     template_name = 'bboard/adv-detail.html'
     context_object_name = 'adv'
@@ -103,6 +107,7 @@ def contacts_view(request):
 
 
 class AdvertisementCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """Страница создания объявления"""
     permission_required = ('bboard.add_advertisement',)
     model = Advertisement
     template_name = 'bboard/adv-edit.html'
@@ -118,6 +123,7 @@ class AdvertisementCreateView(LoginRequiredMixin, PermissionRequiredMixin, Creat
 
 
 class AdvertisementUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """Страница редактирования объявления"""
     permission_required = ('bboard.change_advertisement',)
     model = Advertisement
     form_class = AdvertisementForm
@@ -129,6 +135,7 @@ class AdvertisementUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Updat
 
 
 class AdvertisementDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """Страница удаления объявления"""
     permission_required = ('bboard,delete_advertisement',)
     model = Advertisement
     template_name = 'adv-delete.html'
@@ -136,6 +143,7 @@ class AdvertisementDeleteView(LoginRequiredMixin, PermissionRequiredMixin, Delet
 
 
 class LkDetailView(LoginRequiredMixin, ListView):
+    """Страница личного кабинета со списком объявлений"""
     model = Advertisement
     template_name = 'lk/lk-advertisements.html'
     context_object_name = 'advertisements'
@@ -147,12 +155,14 @@ class LkDetailView(LoginRequiredMixin, ListView):
 
 
 class LkSettingsDetailView(DetailView):
+    """Страница личного кабинета с настройками пользователя"""
     model = User
     template_name = 'lk/settings.html'
     context_object_name = 'user'
 
 
 class LkSettingsUpdateView(UpdateView):
+    """Страница редактирования настроек пользователя"""
     model = User
     template_name = 'lk/settings-edit.html'
     form_class = UserSettingsForm
@@ -163,6 +173,7 @@ class LkSettingsUpdateView(UpdateView):
 
 
 class SettingsAvatarView(TemplateView):
+    """Страница редактирования аватара"""
     template_name = 'lk/settings-avatar.html'
 
     def get_context_data(self, **kwargs):
@@ -185,6 +196,7 @@ def change_avatar_view(request, pk):
 
 
 class ReactionCreateView(LoginRequiredMixin, CreateView):
+    """Страница создания отклика"""
     model = Reaction
     template_name = 'bboard/reaction.html'
     form_class = ReactionForm
@@ -211,6 +223,7 @@ class ReactionCreateView(LoginRequiredMixin, CreateView):
 
 
 class ReactionUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+    """Страница редактирования отклика"""
     model = Reaction
     form_class = ReactionForm
     template_name = 'bboard/reaction.html'
@@ -228,6 +241,7 @@ class ReactionUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 class ReactionListView(LoginRequiredMixin, AuthorRequiredMixin, DetailView):
+    """Страница со списком откликов"""
     model = Advertisement
     template_name = 'bboard/reaction-list.html'
     context_object_name = 'advertisement'
@@ -249,6 +263,7 @@ class ReactionListView(LoginRequiredMixin, AuthorRequiredMixin, DetailView):
 
 
 class ReactionDetailView(LoginRequiredMixin, DetailView):
+    """Страница отклика"""
     model = Reaction
     template_name = 'bboard/reaction-detail.html'
     context_object_name = 'reaction'
@@ -261,6 +276,7 @@ class ReactionDetailView(LoginRequiredMixin, DetailView):
 
 
 class ReactionDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """Страница удаления отклика"""
     permission_required = ('bboard.delete_reaction',)
     model = Reaction
     template_name = 'bboard/reaction-delete.html'
@@ -276,6 +292,7 @@ def reaction_accept(request, reaction_id):
 
 
 class MyReactionslistView(ListView):
+    """Страница со списком откликов пользователя"""
     model = Advertisement
     template_name = 'lk/my-reactions.html'
 
@@ -293,6 +310,7 @@ class MyReactionslistView(ListView):
 
 
 class MyReactionDetailView(LoginRequiredMixin, DetailView):
+    """Страница отклика пользователя"""
     model = Advertisement
     template_name = 'bboard/my-reaction.html'
     context_object_name = 'adv'

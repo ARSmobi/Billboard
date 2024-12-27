@@ -1,26 +1,17 @@
-{% extends "account/base_manage.html" %}
-{% load allauth i18n %}
-{% block head_title %}
-    {% trans "Sign Out" %}
-{% endblock head_title %}
+{% extends "default.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Выход" %}
+{% endblock title %}
+
 {% block content %}
-Собственная страница
-    {% element h1 %}
-        {% trans "Sign Out" %}
-    {% endelement %}
-    {% element p %}
-        {% trans 'Are you sure you want to sign out?' %}
-    {% endelement %}
-    {% url 'account_logout' as action_url %}
-    {% element form method="post" action=action_url no_visible_fields=True %}
-        {% slot body %}
-            {% csrf_token %}
-            {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-            {% element button type="submit" %}
-                {% trans 'Sign Out' %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
+    <h1>{%  trans "Выход" %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>{% trans "Вы уверены в том что хотите выйти?" %}</h3>
+        <input type="submit" value="{% trans 'Выйти' %}"/>
+    </form>
 {% endblock content %}

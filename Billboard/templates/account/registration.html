@@ -3,16 +3,17 @@
 {% load static %}
 
 {% block title %}
-    {% trans "Вход" %}
+    {% trans "Регистрация" %}
 {% endblock title %}
 
 {% block content %}
-    <h1>{%  trans "Вход" %}</h1>
+    <h1>{%  trans "Регистрация" %}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="{% trans 'Войти' %}"/>
+        <input type="submit" value="Register">
+        <a href="{% url 'login' %}">{% trans "Войти" %}</a>
+        <a href="{% url 'logout' %}">{% trans "Выйти" %}</a>
         <a href="{% url 'password_reset' %}">{% trans "Забыли пароль?" %}</a>
-        <a href="{% url 'registration' %}">{% trans "Регистрация" %}</a>
     </form>
 {% endblock content %}

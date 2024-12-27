@@ -6,9 +6,12 @@ from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
+import random
+import string
 
 
 class User(AbstractUser):
+    # activated = models.BooleanField(default=False)
     GENDER = (
         ('m', 'Мужской'),
         ('f', 'Женский'),
@@ -31,6 +34,24 @@ class User(AbstractUser):
             last_activity_time = timezone.datetime.fromisoformat(last_activity)
             return timezone.now() - last_activity_time < timedelta(minutes=5)
         return False
+
+
+class VerificationCode(models.Model):
+    code = models.CharField(max_length=10, unique=True, default='')
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = self.generate_code()
+        super().save(*args, **kwargs)
+
+    def generate_code(self):
+        length = 10
+        characters = string.ascii_uppercase + string.digits
+        return ''.join(random.choices(characters, k=length))
+
+    def __str__(self):
+        return self.code
 
 
 class Category(models.Model):
