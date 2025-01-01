@@ -6,7 +6,9 @@ from bboard.models import User
 
 class VerificationCode(models.Model):
     code = models.CharField(max_length=10, unique=True, default='')
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='verification_code')
+    created_at = models.DateTimeField(auto_now_add=True)
+    delete_at = models.DateTimeField(null=True)
 
     def save(self, *args, **kwargs):
         if not self.code:

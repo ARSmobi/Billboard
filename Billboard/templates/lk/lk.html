@@ -17,7 +17,6 @@
     <div class="d-flex flex-row flex-shrink-1 p-2 bd-highlight">
         <div class="d-flex flex-column align-items-center">
             <img height="50px" src="{% static 'avatar/'|add:user.avatar %}" alt="avatar" style="border: 1px solid white; border-radius: 25px; padding: 3px">
-            <img width="15px" src="{% static 'bootstrap/img/arrow_down.svg' %}" alt="">
         </div>
         <div class="p-2 bd-highlight">
             <h3>{% if not user.first_name and not user.last_name %}{{ user.username }}{% endif %}{{ user.first_name }} {{ user.last_name }}</h3>

@@ -168,6 +168,13 @@ class LkSettingsUpdateView(UpdateView):
     form_class = UserSettingsForm
     context_object_name = 'user'
 
+    # def post(self, request, *args, **kwargs):
+    #     form = UserSettingsForm(request.POST, instance=self.get_object())
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect(reverse('lk_settings'))
+    #     return self.render_to_response({'form': form})
+
     def get_success_url(self):
         return reverse('lk_settings', kwargs={'pk': self.object.id})
 

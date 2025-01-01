@@ -10,8 +10,33 @@
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input class="btn btn-outline-primary" type="submit" value="{% trans 'Сохранить' %}">
+    <div class="d-flex justify-content-center bd-highlight mb-2">
+        <div class="p-4 row row-cols-2">
+            <div class="p-1 col text-end">{% trans "Псевдоним пользователя" %}</div>
+            <div class="p-1 col text-warning">{{ user.username }}</div>
+    
+            <div class="p-1 col text-end">{% trans "Имя" %}</div>
+            <div class="p-1 col text-warning">{{ form.first_name }}</div>
+    
+            <div class="p-1 col text-end">{% trans "Фамилия" %}</div>
+            <div class="p-1 col text-warning">{{ form.last_name }}</div>
+    
+            <div class="p-1 col text-end">{% trans "E-mail" %}</div>
+            <div class="p-1 col text-warning">{{ user.email }}</div>
+    
+            <div class="p-1 col text-end">{% trans "Дата рождения" %}</div>
+            <div class="p-1 col text-warning">{{ form.birthday }}</div>
+    
+            <div class="p-1 col text-end">{% trans "Пол" %}</div>
+            <div class="p-1 col text-warning">{{ form.gender }}</div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <input class="btn btn-outline-primary" type="submit" value="{% trans 'Сохранить' %}">
+    </div>
 </form>
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-outline-danger" href="{% url 'delete_warning' %}">Удалить аккаунт</a>
+    </div>
 
 {% endblock lk_content %}

@@ -30,12 +30,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'accounts.apps.AccountsConfig',
 
-    'allauth',
-    'allauth.account',
+    # 'accounts',
+    'bboard',
     'ckeditor',
     'ckeditor_uploader',
-    'bboard',
     'django_filters',
 ]
 
@@ -47,7 +47,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
     'bboard.middleware.UpdateLastActivityMiddleware',
 ]
 
@@ -56,7 +55,7 @@ ROOT_URLCONF = 'Billboard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,19 +105,21 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 
 LOGIN_REDIRECT_URL = '/advertisements/'
 LOGOUT_REDIRECT_URL = '/advertisements/'
 
-ACCOUNT_LOGIN_REDIRECT_URL = '/advertisements/'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_UNIQUE_USERNAME = True
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# ACCOUNT_LOGIN_REDIRECT_URL = '/advertisements/'
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED = True
+# ACCOUNT_UNIQUE_USERNAME = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_FORMS = {'signup': 'account.forms.CustomSignupForm'}
 
@@ -134,6 +135,7 @@ AUTH_USER_MODEL = 'bboard.User'
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+# TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

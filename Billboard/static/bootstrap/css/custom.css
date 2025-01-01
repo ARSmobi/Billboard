@@ -1,0 +1,29 @@
+.logo {
+    transition: 1s
+}
+
+.logo:hover {
+    scale: 120%;
+    transition: 1s;
+    color: blue;
+}
+
+.text-user {
+    color: orange;
+    transition: 0.5s;
+}
+
+.text-user-active {
+    color: red;
+    transition: 0.5s;
+}
+
+.form-control {
+    min-width: 300px;
+    max-width: 400px;
+    justify-content: center;
+}
+
+.form-group {
+    justify-content: center;
+}

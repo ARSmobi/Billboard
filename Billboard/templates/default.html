@@ -11,23 +11,8 @@
     <meta name="author" content="" />
     <title>MMORPG Bulletin board | {% block title %}{% endblock title %}</title>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'bootstrap/css/custom.css' %}" rel="stylesheet" />
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <style>
-        .logo {
-            transition: 1s}
-        .logo:hover {
-            scale: 120%;
-            transition: 1s;
-            color: blue;}
-        .text-user {
-            color: orange;
-            transition: 0.5s;
-        }
-        .text-user-active {
-            color: red;
-            transition: 0.5s;
-        }
-    </style>
 </head>
 <body style="background-image: url('{% static "bootstrap/img/header4.png" %}'); background-attachment: fixed;">
 
@@ -55,10 +40,10 @@
                         <a class="nav-link {% if request.path == '/contacts/'%}active{% endif %}" href="/contacts/">{% trans "Контакты" %}</a></li>
                     {% if request.user.username %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/account/logout/">&#9111; {% trans "Выйти" %}</a></li>
+                        <a class="nav-link" href="/accounts/logout/confirm">&#9111; {% trans "Выйти" %}</a></li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/account/login/">&#9112; {% trans "Войти" %}</a></li>
+                        <a class="nav-link" href="/accounts/login/">&#9112; {% trans "Войти" %}</a></li>
                     {% endif %}
                 </ul>
             </div>

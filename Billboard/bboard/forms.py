@@ -18,7 +18,8 @@ class ReactionForm(forms.ModelForm):
 
 class UserSettingsForm(forms.ModelForm):
     now = datetime.now()
-    birthday = forms.DateField(widget=forms.SelectDateWidget(years=range(1950, now.year - 5)))
+    # birthday = forms.DateField(widget=forms.SelectDateWidget(years=range(1950, now.year - 5)))
+    birthday = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = User

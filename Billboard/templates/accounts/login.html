@@ -1,0 +1,21 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+{% load my_tags %}
+
+{% block title %}
+    {% trans "Вход" %}
+{% endblock title %}
+
+{% block content %}
+
+<form method="post" class="form-group">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="{% trans "Войти" %}">
+        <a href="{% url 'signup' %}" class="btn btn-primary">
+            {% trans "Регистрация" %}
+        </a>
+</form>
+
+{% endblock content %}
