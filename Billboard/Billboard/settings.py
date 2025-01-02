@@ -3,6 +3,7 @@ from os import getenv
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,9 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'accounts.apps.AccountsConfig',
 
-    # 'accounts',
+    'accounts',
     'bboard',
     'ckeditor',
     'ckeditor_uploader',
@@ -74,6 +74,7 @@ SITE_ID = 1
 
 SITE_URL = getenv('SITE_URL')
 
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -103,6 +104,9 @@ DATABASES = {
 #     },
 # ]
 
+
+# Authentications
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
@@ -125,9 +129,11 @@ ACCOUNT_FORMS = {'signup': 'account.forms.CustomSignupForm'}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
 # User
 
 AUTH_USER_MODEL = 'bboard.User'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -154,7 +160,22 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery and Redis settings
+
+CELERY_BEAT_SCHEDULE = {
+    'delete-expired-verification-codes': {
+        'task': 'accounts.tasks.delete_expired_verification_codes',
+        'schedule': crontab(minute='*/5'),
+    },
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_IMPORTS = ('accounts.tasks',)

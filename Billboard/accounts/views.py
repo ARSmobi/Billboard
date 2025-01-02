@@ -20,7 +20,12 @@ class UserSignUpView(CreateView):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password1'])
         user.save()
-        verification_code = VerificationCode.objects.create(user=user, delete_at=timezone.now() + timezone.timedelta(hours=1))
+        # создание проверочного кода и времени для его удаления
+        verification_code = (
+            VerificationCode.objects.create(
+                user=user,
+                delete_at=timezone.now() + timezone.timedelta(minutes=1))
+        )
 
         send_mail (
             'Verification Code',
