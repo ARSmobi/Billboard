@@ -20,7 +20,12 @@ class UserSignUpView(CreateView):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password1'])
         user.save()
-        verification_code = VerificationCode.objects.create(user=user, delete_at=timezone.now() + timezone.timedelta(hours=1))
+        # создание проверочного кода и времени для его удаления
+        verification_code = (
+            VerificationCode.objects.create(
+                user=user,
+                delete_at=timezone.now() + timezone.timedelta(hours=1))
+        )
 
         send_mail (
             'Verification Code',
@@ -52,6 +57,12 @@ class UserLoginView(LoginView):
     form_class = LoginForm
     template_name = 'accounts/login.html'
     redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if not user.is_active:
+            return redirect('verification')
+        return super().form_valid(form)
 
 
 class UserLogoutView(LogoutView):
