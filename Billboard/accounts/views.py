@@ -1,15 +1,16 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.http import urlencode
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, UpdateView
 from pyexpat.errors import messages
 
-from .forms import SignUpForm, LoginForm, VerificationForm
+from .forms import SignUpForm, LoginForm, VerificationForm, PasswordResetEmailForm, PasswordResetForm
 from .models import VerificationCode
 from bboard.models import User
 from Billboard.custom_settings import *
@@ -77,9 +78,14 @@ def send_verification_code(request, user_id, action):
     if action == 'signup':
         url = reverse('verification', args=[user_id])
         minutes = REGISTRATION_CODE_LIFETIME
-    else:
+    elif action == 'delete':
         url = reverse('delete_account', args=[user_id])
         minutes = DELETE_ACCOUNT_CODE_LIFETIME
+    elif action == 'reset_password':
+        url = reverse('password_reset_verification', args=[user_id])
+        minutes = PASSWORD_RESET_CODE_LIFETIME
+    else:
+        return HttpResponse('Invalid action')
     verification_code = (
         VerificationCode.objects.create(
             user=user,
@@ -138,3 +144,50 @@ class UserDeleteView(DeleteView):
         user.delete()
         verification_code.delete()
         return super().form_valid(form)
+
+
+def password_reset_email(request):
+    if request.method == 'POST':
+        form = PasswordResetEmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            if User.objects.filter(email=email).exists():
+                user = User.objects.get(email=email)
+                url = reverse('password_reset_verification', args=[user.id])
+                return redirect(url)
+            else:
+                raise ValidationError('Пользователь с таким email не найден')
+    else:
+        form = PasswordResetEmailForm()
+    return render(request, 'accounts/password-reset-email.html', {'form': form})
+
+
+def password_reset_verification(request, user_id):
+    user = User.objects.get(id=user_id)
+    have_code = VerificationCode.objects.filter(user=user).exists()
+    code_time_delta = 0
+    if have_code:
+        code_delete_at = VerificationCode.objects.get(user=user).delete_at
+        code_time_delta = (code_delete_at - timezone.now()).seconds / 60
+    if request.method == 'POST':
+        form = VerificationForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            verification_code = VerificationCode.objects.get(code=code)
+            user = verification_code.user
+            verification_code.delete()
+            url = reverse('password_reset', args=[user.id])
+            return redirect(url)
+    else:
+        form = VerificationForm()
+    return render(request, 'accounts/password-reset-verification.html', {'form': form, 'user_id': user_id, 'have_code': have_code, 'code_time_delta': int(code_time_delta)})
+
+
+class PasswordResetView(UpdateView):
+    model = User
+    form_class = PasswordResetForm
+    template_name = 'accounts/password-reset.html'
+    success_url = reverse_lazy('login')
+
+    def get_object(self, queryset=None):
+        return User.objects.get(id=self.kwargs['user_id'])

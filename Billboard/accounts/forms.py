@@ -13,7 +13,6 @@ class SignUpForm(forms.ModelForm):
     error_messages = {
         "password_mismatch": "Два пароля не совпадают",
         "username_exists": "Пользователь с таким именем уже существует",
-        "wrong_password": "Неверный пароль",
         "email_exists": "Пользователь с таким email уже существует",
     }
     username = forms.CharField(
@@ -91,3 +90,51 @@ class VerificationForm(forms.Form):
         if not VerificationCode.objects.filter(code=code).exists():
             raise forms.ValidationError("Не верный проверочный код")
         return code
+
+
+class PasswordResetEmailForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            raise ValidationError('Пользователь с таким email не существует')
+        return email
+
+
+class PasswordResetForm(forms.Form):
+    error_messages = {
+        "password_mismatch": "Два пароля не совпадают",
+    }
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput,
+        help_text='Пожалуйста, введите пароль')
+    password2 = forms.CharField(
+        label='Подтверждение пароля',
+        widget=forms.PasswordInput,
+        help_text='Пожалуйста, подтвердите пароль')
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+        widgets = {
+            'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', "Пароли не совпадают")
+        return password2
+
+    def save(self):
+        self.instance.set_password(self.cleaned_data['password1'])
+        self.instance.save()
+        return self.instance

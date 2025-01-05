@@ -9,3 +9,6 @@ DELETE_UNCONFIRMED_ACCOUNT_DAYS = 3
 
 # Периодическая проверка старых проверочных кодов в минутах
 DELETE_EXPIRED_VERIFICATION_CODE_INTERVAL = 1
+
+# Время жизни проверочного кода для восстановления пароля в минутах
+PASSWORD_RESET_CODE_LIFETIME = 10
