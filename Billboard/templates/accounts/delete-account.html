@@ -7,13 +7,22 @@
 {% endblock title %}
 
 {% block content %}
+     
+{% if not have_code %}
+    <a href="{% url 'send_verification_code' user_id=user_id action='delete' %}">
+        <button class="btn btn-outline-primary" type="button">{% trans "Отправить код" %}</button>
+    </a>
+{% else %}
+    <h4>{% trans "Вам на почту отправлено письмо с кодом для подтверждением удаления учетной записи. Скопируйте его и вставьте в поле ниже." %}</h4>
+    <p>{% blocktrans %} Повторно отправить код можно через {{ code_time_delta }} минут {% endblocktrans %}</p>
+{% endif %}
 
-<form method="post">
+<form method="post" class="form-group">
     {% csrf_token %}
-    <div class="form-group">
-        <h1>{% trans "Удаление учетной записи?" %}</h1>
-        <input type="submit" class="btn btn-primary" value="{% trans "Удалить" %}">
-    </div>
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="{% trans 'Подтвердить' %}">
 </form>
+    
+    {{ request.path }}
 
 {% endblock content %}

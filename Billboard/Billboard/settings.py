@@ -2,6 +2,9 @@ import os.path
 from os import getenv
 from pathlib import Path
 from dotenv import load_dotenv
+
+from .custom_settings import *
+
 load_dotenv()
 from celery.schedules import crontab
 
@@ -172,7 +175,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BEAT_SCHEDULE = {
     'delete-expired-verification-codes': {
         'task': 'accounts.tasks.delete_expired_verification_codes',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute=f'*/{DELETE_EXPIRED_VERIFICATION_CODE_INTERVAL}'),
     },
 }
 

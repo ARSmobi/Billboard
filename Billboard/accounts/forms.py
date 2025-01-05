@@ -1,13 +1,19 @@
+from allauth.core.internal.httpkit import redirect
 from django import forms
 from bboard.models import User
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+
+from .models import VerificationCode
 
 
 class SignUpForm(forms.ModelForm):
     error_messages = {
         "password_mismatch": "Два пароля не совпадают",
         "username_exists": "Пользователь с таким именем уже существует",
+        "wrong_password": "Неверный пароль",
         "email_exists": "Пользователь с таким email уже существует",
     }
     username = forms.CharField(
@@ -59,9 +65,29 @@ class SignUpForm(forms.ModelForm):
 
 
 class LoginForm(AuthenticationForm):
+    error_messages = {
+        "invalid_login": "Неверный логин или пароль",
+        "inactive": "Пользователь заблокирован",
+    }
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if user and not user.is_active:
+            url = reverse('verification', args=[user.id])
+            return redirect(url)
+        return cleaned_data
 
 
 class VerificationForm(forms.Form):
     code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    def clean_code(self):
+        code = self.cleaned_data.get('code')
+        if not VerificationCode.objects.filter(code=code).exists():
+            raise forms.ValidationError("Не верный проверочный код")
+        return code

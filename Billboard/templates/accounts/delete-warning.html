@@ -7,13 +7,10 @@
 {% endblock title %}
 
 {% block content %}
-
-<form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-        <h1>{% trans "Внимание! После удаления учетной записи вы навсегда утратите доступ к вашему аккаунту!" %}</h1>
-        <a href="{% url 'delete_account' pk=request.user.pk %}" class="btn btn-danger">{% trans "Продолжить" %}</a>
-    </div>
-</form>
+    
+<div class="form-group">
+    <h4>{% trans "Внимание! После удаления учетной записи вы навсегда утратите доступ к вашему аккаунту!" %}</h4>
+    <a href="{% url 'delete_account' pk=request.user.pk %}" class="btn btn-danger">{% trans "Продолжить" %}</a>
+</div>
 
 {% endblock content %}
