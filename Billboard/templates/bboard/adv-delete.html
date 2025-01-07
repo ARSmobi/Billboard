@@ -1,0 +1,21 @@
+{% extends 'default.html' %}
+{% load i18n %}
+{% load static %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% block title %}
+    {% trans "Удаление объявления" %}
+{% endblock title %}
+
+{% block content %}
+    
+    <h3>{% trans "Удаление объявления" %}</h3>
+    <hr>
+    <b>{{ advertisement.title }}</b>
+    <form method="post">
+        {% csrf_token %}
+        <h4>{% trans "Вы действительно хотите удалить объявление?" %}</h4>
+        <input class="btn btn-outline-danger" type="submit" value="{% trans 'Удалить' %}">
+    </form>
+    
+{% endblock content %}

@@ -138,7 +138,7 @@ class AdvertisementDeleteView(LoginRequiredMixin, PermissionRequiredMixin, Delet
     """Страница удаления объявления"""
     permission_required = ('bboard,delete_advertisement',)
     model = Advertisement
-    template_name = 'adv-delete.html'
+    template_name = 'bboard/adv-delete.html'
     success_url = '/advertisements/'
 
 
@@ -292,6 +292,7 @@ class ReactionDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 
 
 def reaction_accept(request, reaction_id):
+    """Функция принятия отклика"""
     reaction = Reaction.objects.get(pk=reaction_id)
     reaction.accept()
     url = reverse('reaction_detail', args=[reaction_id])
@@ -328,14 +329,8 @@ class MyReactionDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class TestView(CreateView):
-    model = User
-    template_name = 'bboard/test.html'
-    form_class = UserSettingsForm
-    context_object_name = 'user'
-
-
 def subscription(request, adv_id):
+    """Функция подписки пользователя на категорию/пользователя"""
     user = User.objects.get(id=request.user.id)
     to = request.GET.get('to')
     content_type = None
