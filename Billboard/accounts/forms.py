@@ -76,6 +76,8 @@ class LoginForm(AuthenticationForm):
         username = cleaned_data.get('username')
         password = cleaned_data.get('password')
         user = authenticate(username=username, password=password)
+        if not user:
+            raise ValidationError('Пользователь не найден')
         if user and not user.is_active:
             url = reverse('verification', args=[user.id])
             return redirect(url)
@@ -121,7 +123,7 @@ class PasswordResetForm(forms.Form):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('password1', 'password2')
         widgets = {
             'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
@@ -137,4 +139,5 @@ class PasswordResetForm(forms.Form):
     def save(self):
         self.instance.set_password(self.cleaned_data['password1'])
         self.instance.save()
+        VerificationCode.objects.get(user_id=self.instance.id).delete()  # удаляем проверочный код
         return self.instance

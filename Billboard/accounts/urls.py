@@ -6,10 +6,10 @@ from .views import UserSignUpView, UserLoginView, UserLogoutView, UserDeleteView
 
 urlpatterns = [
     path('signup/', UserSignUpView.as_view(), name='signup'),
-    path('signup/verification/<int:user_id>/', verification_view, name='verification'),
+    path('signup/verification/<int:user_id>/<str:action>/', verification_view, name='verification'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('passwordreset/email/', password_reset_email, name='password_reset_email'),
-    path('passwordreset/confirm/<int:user_id>/', password_reset_verification, name='password_reset_verification'),
+    path('passwordreset/verification/<int:user_id>/<str:action>/', password_reset_verification, name='password_reset_verification'),
     path('passwordreset/<int:user_id>/', PasswordResetView.as_view(), name='password_reset'),
     path('logout/confirm/', TemplateView.as_view(template_name='accounts/logout-confirm.html'), name='logout_confirm'),
     path('logout/', UserLogoutView.as_view(), name='logout'),

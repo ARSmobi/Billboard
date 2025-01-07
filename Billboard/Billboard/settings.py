@@ -92,20 +92,20 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 
 # Authentications
@@ -127,10 +127,14 @@ LOGOUT_REDIRECT_URL = '/advertisements/'
 # ACCOUNT_UNIQUE_USERNAME = True
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
-ACCOUNT_FORMS = {'signup': 'account.forms.CustomSignupForm'}
+# ACCOUNT_FORMS = {'signup': 'account.forms.CustomSignupForm'}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.yourmailserver.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 
 
 # User
@@ -177,6 +181,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'accounts.tasks.delete_expired_verification_codes',
         'schedule': crontab(minute=f'*/{DELETE_EXPIRED_VERIFICATION_CODE_INTERVAL}'),
     },
+    'delete-unconfirmed-accounts': {
+        'task': 'accounts.tasks.delete_unconfirmed_accounts',
+        'schedule': crontab(hour='0', minute='0', day_of_week=f'*/{DELETE_UNCONFIRMED_ACCOUNT_DAYS}'),
+    }
 }
 
 CELERY_BROKER_URL = 'redis://localhost:6379'

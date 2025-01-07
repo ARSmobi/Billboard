@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
@@ -23,7 +24,7 @@ class UserSignUpView(CreateView):
     template_name = 'accounts/signup.html'
 
     def get_success_url(self):
-        return reverse('verification', args=[self.object.id])
+        return reverse('verification', args=[self.object.id, 'signup'])
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -47,7 +48,7 @@ class UserSignUpView(CreateView):
         return super().form_valid(form)
 
 
-def verification_view(request, user_id):
+def verification_view(request, user_id, action):
     user = User.objects.get(id=user_id)
     have_code = VerificationCode.objects.filter(user=user).exists()
     code_time_delta = 0  # Время жизни кода в минутах
@@ -66,23 +67,28 @@ def verification_view(request, user_id):
             return redirect('login')
     else:
         form = VerificationForm()
-    return render(
-        request,
+    return render(request,
         'accounts/verification.html',
-        {'form': form, 'have_code': have_code, 'user_id': user_id, 'code_time_delta': int(code_time_delta)}
-    )
+        {
+            'form': form,
+            'have_code': have_code,
+            'user_id': user_id,
+            'code_time_delta': int(code_time_delta),
+            'action': action
+        })
+
 
 
 def send_verification_code(request, user_id, action):
     user = User.objects.get(id=user_id)
     if action == 'signup':
-        url = reverse('verification', args=[user_id])
+        url = reverse('verification', args=[user_id, action])
         minutes = REGISTRATION_CODE_LIFETIME
     elif action == 'delete':
-        url = reverse('delete_account', args=[user_id])
+        url = reverse('delete_account', args=[user_id, action])
         minutes = DELETE_ACCOUNT_CODE_LIFETIME
-    elif action == 'reset_password':
-        url = reverse('password_reset_verification', args=[user_id])
+    elif action == 'password_reset':
+        url = reverse('password_reset_verification', args=[user_id, action])
         minutes = PASSWORD_RESET_CODE_LIFETIME
     else:
         return HttpResponse('Invalid action')
@@ -111,7 +117,7 @@ class UserLoginView(LoginView):
         if User.objects.filter(username=username).exists():
             user = User.objects.get(username=username)
             if user and not user.is_active:
-                url = reverse('verification', args=[user.id])
+                url = reverse('verification', args=[user.id, 'signup'])
                 return redirect(url)
         return super().form_invalid(form)
 
@@ -121,10 +127,10 @@ class UserLogoutView(LogoutView):
     next_page = 'login'
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     form_class = VerificationForm
-    template_name = 'accounts/delete-account.html'
+    template_name = 'accounts/verification.html'
     success_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -132,6 +138,7 @@ class UserDeleteView(DeleteView):
         context['user_id'] = self.kwargs['pk']
         context['have_code'] = VerificationCode.objects.filter(user=self.object.id).exists()
         context['code_time_delta'] = 0
+        context['action'] = 'delete'
         if VerificationCode.objects.filter(user=self.object.id).exists():
             code_delete_at = VerificationCode.objects.get(user=self.object.id).delete_at
             context['code_time_delta'] = int((code_delete_at - timezone.now()).seconds / 60)
@@ -153,7 +160,7 @@ def password_reset_email(request):
             email = form.cleaned_data['email']
             if User.objects.filter(email=email).exists():
                 user = User.objects.get(email=email)
-                url = reverse('password_reset_verification', args=[user.id])
+                url = reverse('password_reset_verification', args=[user.id, 'password_reset'])
                 return redirect(url)
             else:
                 raise ValidationError('Пользователь с таким email не найден')
@@ -162,7 +169,7 @@ def password_reset_email(request):
     return render(request, 'accounts/password-reset-email.html', {'form': form})
 
 
-def password_reset_verification(request, user_id):
+def password_reset_verification(request, user_id, action):
     user = User.objects.get(id=user_id)
     have_code = VerificationCode.objects.filter(user=user).exists()
     code_time_delta = 0
@@ -175,12 +182,17 @@ def password_reset_verification(request, user_id):
             code = form.cleaned_data['code']
             verification_code = VerificationCode.objects.get(code=code)
             user = verification_code.user
-            verification_code.delete()
             url = reverse('password_reset', args=[user.id])
             return redirect(url)
     else:
         form = VerificationForm()
-    return render(request, 'accounts/password-reset-verification.html', {'form': form, 'user_id': user_id, 'have_code': have_code, 'code_time_delta': int(code_time_delta)})
+    return render(request,
+                  'accounts/verification.html',
+                  {'form': form,
+                   'user_id': user_id,
+                   'have_code': have_code,
+                   'code_time_delta': int(code_time_delta),
+                   'action': action})
 
 
 class PasswordResetView(UpdateView):
@@ -188,6 +200,12 @@ class PasswordResetView(UpdateView):
     form_class = PasswordResetForm
     template_name = 'accounts/password-reset.html'
     success_url = reverse_lazy('login')
+
+    def dispatch(self, request, *args, **kwargs):
+        user = self.get_object()
+        if not VerificationCode.objects.filter(user=user).exists():
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         return User.objects.get(id=self.kwargs['user_id'])

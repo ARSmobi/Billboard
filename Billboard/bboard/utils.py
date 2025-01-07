@@ -1,6 +1,6 @@
 from django.utils import timezone
 from datetime import timedelta
-from .models import User, Subscription
+from .models import User
 
 
 def is_user_online(user):

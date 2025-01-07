@@ -4,17 +4,29 @@
 {% load my_tags %}
 
 {% block title %}
-    {% trans "Подтверждение регистрации" %}
+    {% if action == 'signup' %}
+        {% trans "Подтверждение регистрации" %}
+    {% elif action == 'password_reset' %}
+        {% trans "Восстановление пароля" %}
+    {%  else %}
+        {% trans "Удаление пользователя" %}
+    {% endif %}
 {% endblock title %}
 
 {% block content %}
 
 {% if not have_code %}
-    <a href="{% url 'send_verification_code' user_id=user_id action='signup' %}">
+    <a href="{% url 'send_verification_code' user_id=user_id action=action %}">
         <button class="btn btn-outline-primary" type="button">{% trans "Отправить код" %}</button>
     </a>
 {% else %}
-    <h4>{% trans "Вам на почту отправлено письмо с кодом для подтверждения регистрации. Скопируйте его и вставьте в поле ниже." %}</h4>
+    {% if action == "signup" %}
+        <h4>{% trans "Вам на почту отправлено письмо с кодом для подтверждения регистрации. Скопируйте его и вставьте в поле ниже." %}</h4>
+    {% elif action == "password_reset" %}
+        <h4>{% trans "Вам на почту отправлено письмо с кодом для подтверждения сброса пароля. Скопируйте его и вставьте в поле ниже." %}</h4>
+    {% else %}
+        <h4>{% trans "Вам на почту отправлено письмо с кодом для подтверждением удаления учетной записи. Скопируйте его и вставьте в поле ниже." %}</h4>
+    {% endif %}
     <p>{% blocktrans %} Повторно отправить код можно через {{ code_time_delta }} минут {% endblocktrans %}</p>
 {% endif %}
     
