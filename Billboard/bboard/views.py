@@ -26,8 +26,6 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lang = get_language()
-        context['lang_code'] = lang
-        print(lang)
         context['text'] = TRANSLATIONS.get(lang, {}).get('home_text', '')
         return context
 
