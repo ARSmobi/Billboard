@@ -1,3 +1,5 @@
+from gettext import gettext as _
+
 from allauth.core.internal.httpkit import redirect
 from django import forms
 from bboard.models import User
@@ -11,26 +13,26 @@ from .models import VerificationCode
 
 class SignUpForm(forms.ModelForm):
     error_messages = {
-        "password_mismatch": "Два пароля не совпадают",
-        "username_exists": "Пользователь с таким именем уже существует",
-        "email_exists": "Пользователь с таким email уже существует",
+        "password_mismatch": _("Два пароля не совпадают"),
+        "username_exists": _("Пользователь с таким именем уже существует"),
+        "email_exists": _("Пользователь с таким email уже существует"),
     }
     username = forms.CharField(
-        label='Имя пользователя',
+        label=_('Имя пользователя'),
         widget=forms.TextInput,
-        help_text='Имя пользователя должно быть уникальным и не должно содержать пробелы.')
+        help_text=_('Имя пользователя должно быть уникальным и не должно содержать пробелы.'))
     email = forms.EmailField(
         label='Email',
         widget=forms.EmailInput,
-        help_text='Введите ваш email')
+        help_text=_('Введите ваш email'))
     password1 = forms.CharField(
-        label='Пароль',
+        label=_('Пароль'),
         widget=forms.PasswordInput,
-        help_text='Пожалуйста, введите пароль')
+        help_text=_('Пожалуйста, введите пароль'))
     password2 = forms.CharField(
-        label='Подтверждение пароля',
+        label=_('Подтверждение пароля'),
         widget=forms.PasswordInput,
-        help_text='Пожалуйста, подтвердите пароль')
+        help_text=_('Пожалуйста, подтвердите пароль'))
 
     class Meta:
         model = User
@@ -45,14 +47,14 @@ class SignUpForm(forms.ModelForm):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
-            raise ValidationError('Такой пользователь уже существует')
+            raise ValidationError(_('Такой пользователь уже существует'))
         return username
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            self.add_error('password2', "Пароли не совпадают")
+            self.add_error('password2', _("Пароли не совпадают"))
         return password2
 
     def save(self, commit=True):
@@ -65,8 +67,8 @@ class SignUpForm(forms.ModelForm):
 
 class LoginForm(AuthenticationForm):
     error_messages = {
-        "invalid_login": "Неверный логин или пароль",
-        "inactive": "Пользователь заблокирован",
+        "invalid_login": _("Неверный логин или пароль"),
+        "inactive": _("Пользователь заблокирован"),
     }
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -77,7 +79,7 @@ class LoginForm(AuthenticationForm):
         password = cleaned_data.get('password')
         user = authenticate(username=username, password=password)
         if not user:
-            raise ValidationError('Пользователь не найден')
+            raise ValidationError(_('Пользователь не найден'))
         if user and not user.is_active:
             url = reverse('verification', args=[user.id])
             return redirect(url)
@@ -90,7 +92,7 @@ class VerificationForm(forms.Form):
     def clean_code(self):
         code = self.cleaned_data.get('code')
         if not VerificationCode.objects.filter(code=code).exists():
-            raise forms.ValidationError("Не верный проверочный код")
+            raise forms.ValidationError(_("Не верный проверочный код"))
         return code
 
 
@@ -100,22 +102,22 @@ class PasswordResetEmailForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if not User.objects.filter(email=email).exists():
-            raise ValidationError('Пользователь с таким email не существует')
+            raise ValidationError(_('Пользователь с таким email не существует'))
         return email
 
 
 class PasswordResetForm(forms.Form):
     error_messages = {
-        "password_mismatch": "Два пароля не совпадают",
+        "password_mismatch": _("Два пароля не совпадают"),
     }
     password1 = forms.CharField(
-        label='Пароль',
+        label=_('Пароль'),
         widget=forms.PasswordInput,
-        help_text='Пожалуйста, введите пароль')
+        help_text=_('Пожалуйста, введите пароль'))
     password2 = forms.CharField(
-        label='Подтверждение пароля',
+        label=_('Подтверждение пароля'),
         widget=forms.PasswordInput,
-        help_text='Пожалуйста, подтвердите пароль')
+        help_text=_('Пожалуйста, подтвердите пароль'))
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
@@ -133,7 +135,7 @@ class PasswordResetForm(forms.Form):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            self.add_error('password2', "Пароли не совпадают")
+            self.add_error('password2', _("Пароли не совпадают"))
         return password2
 
     def save(self):

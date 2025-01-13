@@ -1,5 +1,7 @@
 {% extends 'default.html' %}
+{%  load cache %}
 
+{% cache 600 contacts %}
 {% block content %}
 
 <h1>Контакты</h1>
@@ -8,3 +10,4 @@
 <p>Телефон службы поддержки: +7(012)345-67-89</p>
 
 {% endblock content %}
+{% endcache %}

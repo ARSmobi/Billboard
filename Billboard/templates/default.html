@@ -2,7 +2,9 @@
 {% load i18n %}
 {% load static %}
 {% load my_tags %}
+{% load cache %}
 
+{% cache 60 header %}
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
@@ -45,20 +47,26 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/accounts/login/">&#9112; {% trans "Войти" %}</a></li>
                     {% endif %}
+                    <li>
+                        {% include "lang-select.html" %}
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+{% endcache %}
 
 <div style="color: white; background: rgba(00,20,39,0.7);">
     {% block content %}
     {% endblock content %}
 </div>
 
+{%  cache 60 footer %}
 <footer class="text-white-50">
     {% include "footer.html" %}
 </footer>
+{% endcache %}
 
 </body>
 </html>

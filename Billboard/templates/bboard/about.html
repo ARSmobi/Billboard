@@ -1,5 +1,7 @@
 {% extends 'default.html' %}
+{%  load cache %}
 
+{% cache 600 about %}
 {% block content %}
 <h1>О нас</h1>
 <p>
@@ -8,3 +10,4 @@
     Также можно просматривать объявления без регистрации.
 </p>
 {% endblock content %}
+{% endcache %}

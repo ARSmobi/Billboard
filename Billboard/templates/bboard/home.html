@@ -1,7 +1,9 @@
 {% extends "default.html" %}
 {% load i18n %}
 {% load static %}
+{% load cache %}
 
+{% cache 1 home %}
 {% block title %}
 {% trans "Добро пожаловать!" %}
 {% endblock title %}
@@ -10,8 +12,9 @@
 
 <div style="margin: 10px;">
     {{ text }}
+    {{ lang_code }}
+    {{ purl }}
 </div>
-
-{{ online_users }}
-
+    
 {% endblock content %}
+{% endcache %}

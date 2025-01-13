@@ -12,7 +12,7 @@ from .views import (AdvertisementListView, UserAdvertisementListView, Advertisem
                     ReactionUpdateView, subscription)
 
 urlpatterns = [
-    path('', cache_page(60 * 15)(HomeView.as_view()), name='home'),
+    path('', HomeView.as_view(), name='home'),
     path('advertisements/', AdvertisementListView.as_view(), name='index'),
     path('user/<int:user_id>/advertisements', UserAdvertisementListView.as_view(), name='user_advs'),
     path('about/', about_view, name='about'),

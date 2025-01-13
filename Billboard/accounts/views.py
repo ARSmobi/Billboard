@@ -1,15 +1,14 @@
-from django.contrib.auth import authenticate
+from django.utils.translation import gettext as _
+
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
-from django.utils.http import urlencode
 from django.views.generic import CreateView, DeleteView, UpdateView
-from pyexpat.errors import messages
 
 from .forms import SignUpForm, LoginForm, VerificationForm, PasswordResetEmailForm, PasswordResetForm
 from .models import VerificationCode
@@ -38,8 +37,8 @@ class UserSignUpView(CreateView):
         )
 
         send_mail (
-            'Verification Code',
-            f'Your verification code is {verification_code.code}',
+            _('Код подтверждения регистрации'),
+            _(f'Ваш код подтверждения: {verification_code.code}. Скопируйте его и используйте для продолжения регистрации.'),
             'from@example.com',
             [user.email],
         )
@@ -163,7 +162,7 @@ def password_reset_email(request):
                 url = reverse('password_reset_verification', args=[user.id, 'password_reset'])
                 return redirect(url)
             else:
-                raise ValidationError('Пользователь с таким email не найден')
+                raise ValidationError(_('Пользователь с таким email не найден'))
     else:
         form = PasswordResetEmailForm()
     return render(request, 'accounts/password-reset-email.html', {'form': form})

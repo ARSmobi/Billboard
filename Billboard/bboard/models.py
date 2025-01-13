@@ -6,15 +6,14 @@ from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
-import random
-import string
+from django.utils.translation import gettext as _
 
 
 class User(AbstractUser):
     is_active = models.BooleanField(default=False)
     GENDER = (
-        ('m', 'Мужской'),
-        ('f', 'Женский'),
+        ('m', _('Мужской')),
+        ('f', _('Женский')),
     )
     gender = models.CharField(max_length=1, choices=GENDER, default='')
     birthday = models.DateTimeField(null=True)
@@ -61,8 +60,8 @@ class Reaction(models.Model):
 
     def accept(self):
         adv = Advertisement.objects.get(id=self.advertisement.id)
-        subject = f'Отклик принят'
-        message = f'Ваш отклик на объявление {adv.title} был принят.'
+        subject = _('Отклик принят')
+        message = _(f'Ваш отклик на объявление {adv.title} был принят.')
         from_email = 'note@site.ru'
         to_email = User.objects.get(id=self.user.id).email
         if self.accepted:

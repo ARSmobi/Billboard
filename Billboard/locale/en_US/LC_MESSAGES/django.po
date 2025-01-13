@@ -1,0 +1,493 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-11 16:06+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\accounts\forms.py:16 .\accounts\forms.py:111
+msgid "Два пароля не совпадают"
+msgstr "The two passwords don't match"
+
+#: .\accounts\forms.py:17
+msgid "Пользователь с таким именем уже существует"
+msgstr "The user with that name already exists"
+
+#: .\accounts\forms.py:18
+msgid "Пользователь с таким email уже существует"
+msgstr "The user with this email already exists"
+
+#: .\accounts\forms.py:21
+msgid "Имя пользователя"
+msgstr "Username"
+
+#: .\accounts\forms.py:23
+msgid "Имя пользователя должно быть уникальным и не должно содержать пробелы."
+msgstr "The username must be unique and must not contain spaces."
+
+#: .\accounts\forms.py:27
+msgid "Введите ваш email"
+msgstr "Enter your email"
+
+#: .\accounts\forms.py:29 .\accounts\forms.py:114
+#: .\templates\accounts\login.html:19 .\templates\accounts\signup.html:23
+#: .\templates\lk\settings-edit.html:18
+msgid "Пароль"
+msgstr "Password"
+
+#: .\accounts\forms.py:31 .\accounts\forms.py:116
+msgid "Пожалуйста, введите пароль"
+msgstr "Enter password, please."
+
+#: .\accounts\forms.py:33 .\accounts\forms.py:118
+#: .\templates\accounts\password-reset.html:19
+#: .\templates\accounts\signup.html:26
+msgid "Подтверждение пароля"
+msgstr "Confirm password"
+
+#: .\accounts\forms.py:35 .\accounts\forms.py:120
+msgid "Пожалуйста, подтвердите пароль"
+msgstr "Confirm password, please"
+
+#: .\accounts\forms.py:50
+msgid "Такой пользователь уже существует"
+msgstr "Such a user already exists"
+
+#: .\accounts\forms.py:57 .\accounts\forms.py:138
+msgid "Пароли не совпадают"
+msgstr "Passwords don't match"
+
+#: .\accounts\forms.py:70
+msgid "Неверный логин или пароль"
+msgstr "Invalid username or password"
+
+#: .\accounts\forms.py:71
+msgid "Пользователь заблокирован"
+msgstr "The user is blocked"
+
+#: .\accounts\forms.py:82
+msgid "Пользователь не найден"
+msgstr "The user was not found"
+
+#: .\accounts\forms.py:95
+msgid "Не верный проверочный код"
+msgstr "Invalid verification code"
+
+#: .\accounts\forms.py:105
+msgid "Пользователь с таким email не существует"
+msgstr "The user with this email does not exist"
+
+#: .\accounts\views.py:40
+msgid "Код подтверждения регистрации"
+msgstr "Registration confirmation code"
+
+#: .\accounts\views.py:165
+msgid "Пользователь с таким email не найден"
+msgstr "The user with this email was not found"
+
+#: .\bboard\models.py:15 .\templates\lk\settings.html:33
+msgid "Мужской"
+msgstr "Male"
+
+#: .\bboard\models.py:16 .\templates\lk\settings.html:33
+msgid "Женский"
+msgstr "Female"
+
+#: .\bboard\models.py:63 .\templates\bboard\my-reaction.html:44
+msgid "Отклик принят"
+msgstr "Reaction accepted"
+
+#: .\bboard\views.py:220 .\templates\bboard\reaction.html:7
+#: .\templates\bboard\reaction.html:11
+msgid "Отклик на объявление"
+msgstr "Reaction to the advertisement"
+
+#: .\templates\accounts\delete-warning.html:6
+msgid "Предупреждение перед удалением"
+msgstr "Warning before deleting"
+
+#: .\templates\accounts\delete-warning.html:12
+msgid ""
+"Внимание! После удаления учетной записи вы навсегда утратите доступ к вашему "
+"аккаунту!"
+msgstr ""
+"Attention! After deleting your account, you will permanently lose access to your "
+"account!"
+
+
+#: .\templates\accounts\delete-warning.html:13
+msgid "Продолжить"
+msgstr "Continue"
+
+#: .\templates\accounts\login.html:7
+msgid "Вход"
+msgstr "Login"
+
+#: .\templates\accounts\login.html:16 .\templates\accounts\signup.html:17
+#: .\templates\lk\settings-edit.html:15 .\templates\lk\settings.html:17
+msgid "Псевдоним пользователя"
+msgstr "Username"
+
+#: .\templates\accounts\login.html:24
+msgid "Забыли пароль?"
+msgstr "Forgot your password?"
+
+#: .\templates\accounts\login.html:30 .\templates\default.html:48
+msgid "Войти"
+msgstr "Login"
+
+#: .\templates\accounts\login.html:32 .\templates\accounts\signup.html:7
+msgid "Регистрация"
+msgstr "Sign up"
+
+#: .\templates\accounts\logout-confirm.html:6
+msgid "Выход"
+msgstr "Logout"
+
+#: .\templates\accounts\logout-confirm.html:14
+msgid "Выйти из учетной записи?"
+msgstr "Logout from account?"
+
+#: .\templates\accounts\logout-confirm.html:15 .\templates\default.html:45
+msgid "Выйти"
+msgstr "Logout"
+
+#: .\templates\accounts\password-reset-email.html:7
+#: .\templates\accounts\verification.html:10
+msgid "Восстановление пароля"
+msgstr "Password reset"
+
+#: .\templates\accounts\password-reset-email.html:15
+msgid "Сбросить пароль"
+msgstr "Reset password"
+
+#: .\templates\accounts\password-reset.html:7
+#: .\templates\accounts\password-reset.html:16
+msgid "Новый пароль"
+msgstr "New password"
+
+#: .\templates\accounts\password-reset.html:24
+#: .\templates\lk\settings-edit.html:21
+msgid "Сменить пароль"
+msgstr "Change password"
+
+#: .\templates\accounts\signup.html:20
+msgid "Email"
+msgstr "Email"
+
+#: .\templates\accounts\signup.html:31
+msgid "Зарегистрироваться"
+msgstr "Registration"
+
+#: .\templates\accounts\verification.html:8
+msgid "Подтверждение регистрации"
+msgstr "Confirmation registration"
+
+#: .\templates\accounts\verification.html:12
+msgid "Удаление пользователя"
+msgstr "Deleting user"
+
+#: .\templates\accounts\verification.html:20
+msgid "Отправить код"
+msgstr "Send the code"
+
+#: .\templates\accounts\verification.html:24
+msgid ""
+"Вам на почту отправлено письмо с кодом для подтверждения регистрации. "
+"Скопируйте его и вставьте в поле ниже."
+msgstr ""
+"You have received an email with a code to confirm your registration. "
+"Copy it and paste into the field below."
+
+#: .\templates\accounts\verification.html:26
+msgid ""
+"Вам на почту отправлено письмо с кодом для подтверждения сброса пароля. "
+"Скопируйте его и вставьте в поле ниже."
+msgstr ""
+"An email has been sent to your email with a password reset confirmation code. "
+"Copy it and paste it into the field below."
+
+#: .\templates\accounts\verification.html:28
+msgid ""
+"Вам на почту отправлено письмо с кодом для подтверждением удаления учетной "
+"записи. Скопируйте его и вставьте в поле ниже."
+msgstr ""
+"An email has been sent to your email with a code to confirm the account deletion. "
+"Copy it and paste it into the field below."
+
+#: .\templates\accounts\verification.html:30
+#, python-format
+msgid " Повторно отправить код можно через %(code_time_delta)s минут "
+msgstr " You can resend the code in %(code_time_delta)s minutes "
+
+#: .\templates\accounts\verification.html:36
+msgid "Подтвердить"
+msgstr "Confirm"
+
+#: .\templates\bboard\403.html:10
+msgid "Страница не доступна"
+msgstr "The page is unavailable"
+
+#: .\templates\bboard\403.html:13
+msgid "Страница не доступна для вас!"
+msgstr "The page is unavailable to you!"
+
+#: .\templates\bboard\adv-delete.html:7 .\templates\bboard\adv-delete.html:12
+msgid "Удаление объявления"
+msgstr "Deleting advertisement"
+
+#: .\templates\bboard\adv-delete.html:17
+msgid "Вы действительно хотите удалить объявление?"
+msgstr "Do you want to delete advertisement?"
+
+#: .\templates\bboard\adv-delete.html:18 .\templates\bboard\adv-edit.html:24
+#: .\templates\bboard\reaction-delete.html:12
+#: .\templates\bboard\reaction.html:24
+msgid "Удалить"
+msgstr "Delete"
+
+#: .\templates\bboard\adv-detail.html:25
+msgid "Подписаться"
+msgstr "Subscribe"
+
+#: .\templates\bboard\adv-detail.html:29
+msgid "Отписаться"
+msgstr "Unsubscribe"
+
+#: .\templates\bboard\adv-detail.html:47 .\templates\bboard\my-reaction.html:39
+msgid "Редактировать отклик"
+msgstr "Edit reaction"
+
+#: .\templates\bboard\adv-detail.html:47 .\templates\bboard\reaction.html:17
+#: .\templates\lk\settings.html:38
+msgid "Откликнуться"
+msgstr "React"
+
+#: .\templates\bboard\adv-detail.html:55
+msgid "Откликнувшиеся"
+msgstr "Those who reacted"
+
+#: .\templates\bboard\adv-detail.html:65
+msgid "Все объявления пользователя"
+msgstr "All user advertisements"
+
+#: .\templates\bboard\adv-edit.html:7 .\templates\bboard\adv-edit.html:11
+msgid "Объявление"
+msgstr "Advertisement"
+
+#: .\templates\bboard\adv-edit.html:17 .\templates\lk\settings-edit.html:41
+msgid "Сохранить"
+msgstr "Save"
+
+#: .\templates\bboard\adv-edit.html:20 .\templates\bboard\reaction.html:20
+msgid "Отмена"
+msgstr "Cancel"
+
+#: .\templates\bboard\home.html:8
+msgid "Добро пожаловать!"
+msgstr "Wellcome!"
+
+#: .\templates\bboard\index.html:7 .\templates\bboard\user-advs.html:7
+msgid "Главная"
+msgstr "Home"
+
+#: .\templates\bboard\index.html:15 .\templates\bboard\index.html:36
+#: .\templates\bboard\user-advs.html:14 .\templates\bboard\user-advs.html:30
+msgid "Поиск"
+msgstr "Search"
+
+#: .\templates\bboard\index.html:19
+msgid "Автор"
+msgstr "Author"
+
+#: .\templates\bboard\index.html:25 .\templates\bboard\user-advs.html:19
+msgid "Заголовок"
+msgstr "Title"
+
+#: .\templates\bboard\index.html:31 .\templates\bboard\user-advs.html:25
+msgid "Дата"
+msgstr "Date"
+
+#: .\templates\bboard\index.html:41 .\templates\bboard\reaction-list.html:13
+#: .\templates\bboard\user-advs.html:35
+msgid "Сортировать"
+msgstr "Sort"
+
+#: .\templates\bboard\index.html:44 .\templates\bboard\reaction-list.html:16
+#: .\templates\bboard\user-advs.html:38
+msgid "сначала новые"
+msgstr "new before"
+
+#: .\templates\bboard\index.html:45 .\templates\bboard\reaction-list.html:17
+#: .\templates\bboard\user-advs.html:39
+msgid "сначала старые"
+msgstr "old before"
+
+#: .\templates\bboard\index.html:68 .\templates\bboard\my-reaction.html:20
+#: .\templates\bboard\user-advs.html:56
+#: .\templates\lk\lk-advertisements.html:42 .\templates\lk\my-reactions.html:33
+msgid "Подробнее"
+msgstr "More about"
+
+#: .\templates\bboard\index.html:84 .\templates\bboard\user-advs.html:72
+msgid "Объявлений пока нет"
+msgstr "There are no ads yet"
+
+#: .\templates\bboard\my-reaction.html:5
+msgid "Мой отклик"
+msgstr "My reaction"
+
+#: .\templates\bboard\paginator.html:9
+msgid "Первая стр."
+msgstr "First pafe"
+
+#: .\templates\bboard\paginator.html:13
+msgid "Пред."
+msgstr "Prev."
+
+#: .\templates\bboard\paginator.html:22
+msgid "След."
+msgstr "Next"
+
+#: .\templates\bboard\paginator.html:27
+msgid "Последняя стр."
+msgstr "Last page"
+
+#: .\templates\bboard\reaction-delete.html:5
+msgid "Удаление отклика"
+msgstr "Deleting reaction"
+
+#: .\templates\bboard\reaction-delete.html:9
+msgid "Вы действительно хотите удалить отклик?"
+msgstr "Do you wand delete the reaction?"
+
+#: .\templates\bboard\reaction-detail.html:6
+msgid "Отклик"
+msgstr "Reaction"
+
+#: .\templates\bboard\reaction-detail.html:28
+msgid "Принять"
+msgstr "Accept"
+
+#: .\templates\bboard\reaction-detail.html:36
+msgid "Отклонить"
+msgstr "Reject"
+
+#: .\templates\bboard\reaction-list.html:33 .\templates\lk\my-reactions.html:34
+msgid "Показать отклик"
+msgstr "Show reaction"
+
+#: .\templates\default.html:38
+msgid "Все объявления"
+msgstr "All advertisements"
+
+#: .\templates\default.html:40
+msgid "О нас"
+msgstr "About us"
+
+#: .\templates\default.html:42
+msgid "Контакты"
+msgstr "Contacts"
+
+#: .\templates\footer.html:6
+msgid ""
+"Этот сайт создан в качестве учебного проекта Курбановым Арсланом. Все права "
+"пока еще не защищены, так как на этой стадии обучения не описывается такой "
+"инструмент."
+msgstr ""
+"This website was created as a learning project by Kurbanov Arslan. "
+"All rights are not yet protected, as such a tool is not described "
+"at this stage of training."
+
+#: .\templates\footer.html:9
+msgid "Возможно, в этом месте будет находиться соответствующая информация."
+msgstr "Perhaps there will be relevant information in this place."
+
+#: .\templates\lk\lk-advertisements.html:6
+msgid " Мои объявления"
+msgstr "My advertisements"
+
+#: .\templates\lk\lk-advertisements.html:16
+#: .\templates\lk\lk-advertisements.html:32 .\templates\lk\my-reactions.html:23
+msgid "Создать объявление"
+msgstr "Create advertisement"
+
+#: .\templates\lk\lk-advertisements.html:21 .\templates\lk\my-reactions.html:13
+msgid "Мои объявления"
+msgstr "My advertisements"
+
+#: .\templates\lk\lk-advertisements.html:26 .\templates\lk\my-reactions.html:18
+msgid "Мои отклики"
+msgstr "My reactions"
+
+#: .\templates\lk\lk-advertisements.html:43 .\templates\lk\settings.html:39
+msgid "Редактировать"
+msgstr "Edit"
+
+#: .\templates\lk\lk-advertisements.html:49
+msgid "Вы не создали ни одного объявления"
+msgstr "You haven't created any ads."
+
+#: .\templates\lk\lk.html:6
+msgid "Личный кабинет"
+msgstr "Profile"
+
+#: .\templates\lk\lk.html:23
+msgid "Дата регистрации"
+msgstr "Date registration"
+
+#: .\templates\lk\lk.html:28
+msgid "Настройки"
+msgstr "Settings"
+
+#: .\templates\lk\lk.html:31
+msgid "Последний визит"
+msgstr "Last visit"
+
+#: .\templates\lk\my-reactions.html:6
+msgid " Мои отклики"
+msgstr " My reactions"
+
+#: .\templates\lk\my-reactions.html:40
+msgid "Вы не откликнулись ни на одно объявление"
+msgstr "You doesn't reacted to any of the advertisements"
+
+#: .\templates\lk\settings-avatar.html:6
+msgid " Выберите аватарку"
+msgstr " Choose an avatar"
+
+#: .\templates\lk\settings-edit.html:6 .\templates\lk\settings.html:6
+msgid " Настройки"
+msgstr "Settings"
+
+#: .\templates\lk\settings-edit.html:24 .\templates\lk\settings.html:20
+msgid "Имя"
+msgstr "First name"
+
+#: .\templates\lk\settings-edit.html:27 .\templates\lk\settings.html:23
+msgid "Фамилия"
+msgstr "Last name"
+
+#: .\templates\lk\settings-edit.html:30 .\templates\lk\settings.html:26
+msgid "E-mail"
+msgstr "E-mail"
+
+#: .\templates\lk\settings-edit.html:33 .\templates\lk\settings.html:29
+msgid "Дата рождения"
+msgstr "Date of birth"
+
+#: .\templates\lk\settings-edit.html:36 .\templates\lk\settings.html:32
+msgid "Пол"
+msgstr "Gender"

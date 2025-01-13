@@ -1,6 +1,7 @@
 from os import walk
+from django.utils.translation import activate, get_language, get_language_info, gettext as _
 
-from django.conf import settings
+import django_filters
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -8,11 +9,14 @@ from django.shortcuts import redirect, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from rest_framework import viewsets, permissions
 
 from .forms import AdvertisementForm, ReactionForm, UserSettingsForm
 from .models import Advertisement, Reaction, User, Subscription, Category
 from .filters import AdvertisementFilter
 from .mixins import AuthorRequiredMixin
+from .serializers import UserSerializer, AdvertisementSerializer, CategorySerializer, ReactionSerializer
+from .translations import TRANSLATIONS
 
 
 class HomeView(TemplateView):
@@ -21,11 +25,10 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        text = ''
-        with open('static/home.txt', 'r', encoding='UTF-8') as file:
-            for line in file.readlines():
-                text += line
-        context['text'] = text
+        lang = get_language()
+        context['lang_code'] = lang
+        print(lang)
+        context['text'] = TRANSLATIONS.get(lang, {}).get('home_text', '')
         return context
 
 
@@ -214,8 +217,8 @@ class ReactionCreateView(LoginRequiredMixin, CreateView):
         form.instance.advertisement = adv
         form.instance.user = self.request.user
 
-        subject = 'Отклик на объявление'
-        message = f'На ваше объявление {adv.title} пользователь {self.request.user.username} оставил отклик.'
+        subject = _('Отклик на объявление')
+        message = _(f'На ваше объявление {adv.title} пользователь {self.request.user.username} оставил отклик.')
         from_email = 'note@site.ru'
         to_email = self.request.user.email
         send_mail(subject, message, from_email, [to_email])
@@ -346,3 +349,33 @@ def subscription(request, adv_id):
         Subscription.objects.filter(tag=f'user{user.pk}-{to}{to_id}').delete()
     url = reverse('adv_detail', args=[adv_id])
     return HttpResponseRedirect(url)
+
+
+# ViewSets
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class AdvertisementViewSet(viewsets.ModelViewSet):
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
+    permission_classes = [permissions.IsAdminUser]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ['category_id', 'user_id']
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class ReactionViewSet(viewsets.ModelViewSet):
+    queryset = Reaction.objects.all()
+    serializer_class = ReactionSerializer
+    permission_classes = [permissions.IsAdminUser]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    search_fields = ['user_id', 'advertisement_id']

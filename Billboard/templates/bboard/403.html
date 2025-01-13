@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 {% load i18n %}
 {% load static %}
+{% load cache %}
+
+{% cache 600 access_denied %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,3 +14,4 @@
 <img width="60%" src="{% static 'bootstrap/img/page403.png' %}" alt="Access denied">
 </body>
 </html>
+{% endcache %}

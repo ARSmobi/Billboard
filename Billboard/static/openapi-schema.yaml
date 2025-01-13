@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: 'Billboard API'
+  description: 'Endpoints for the Billboard API'
+  version: 1.0.0
+paths:
+  /swagger/users/:
+    get:
+      description: 'Get all users'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: 'All users'
+      tags:
+        - users
+    post:
+      description: 'Create a new user'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: 'User created'
+      tags:
+        - users
+
+  /swagger/advertisements/:
+    get:
+      description: 'Get all advertisements'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Advertisement'
+          description: 'All advertisements'
+      tags:
+        - advertisements
+    post:
+      description: 'Create a new advertisement'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Advertisement'
+          description: 'Advertisement created'
+      tags:
+        - advertisements
+
+  /swagger/categories/:
+    get:
+      description: 'Get all categories'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: 'All categories'
+      tags:
+        - categories
+
+  /swagger/reactions/:
+    get:
+      description: 'Get all reactions'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reaction'
+          description: 'All reactions'
+      tags:
+        - reactions
+    post:
+      description: 'Create a new reaction'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reaction'
+          description: 'Reaction created'
+      tags:
+        - reactions
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          max_length: 64
+        email:
+          type: string
+          max_length: 64
+        first_name:
+          type: string
+          max_length: 64
+        last_name:
+          type: string
+          max_length: 64
+        gender:
+          type: string
+          max_length: 64
+        birthday:
+          type: string
+          format: date
+      required:
+        - username
+        - email
+
+    Advertisement:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          max_length: 64
+        text:
+          type: string
+        category_id:
+          type: integer
+      required:
+        - user_id
+        - title
+        - category_id
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          max_length: 64
+      required:
+        - name
+
+    Reaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+        advertisement_id:
+          type: integer
+        text:
+          type: string
+        accepted:
+          type: boolean
+        date_creation:
+          type: string
+          format: date
+      required:
+        - user_id
+        - advertisement_id
+        - text
